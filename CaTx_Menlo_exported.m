@@ -281,6 +281,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
     methods (Access = public)       
         function updateTableRemote(app,TcellAcq)
             app.Tcell = TcellAcq;
+            %assignin("base","TcellAcq",TcellAcq);
             updateMeasurementTable(app);
         end
     end
@@ -1280,7 +1281,6 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             if fieldTo > app.totalMeasNum || fieldFrom > fieldTo
                 fig = app.CaTxUIFigure;
                 uialert(fig,'Invalid measurement field list','warning');
-                return;
                 return;
             end
 
