@@ -219,7 +219,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             addStyle(app.UITable_Measurement,sFont);
             addStyle(app.UITable_Header,sFont);
 
-            if measNum < 300
+            if measNum < 500
                 app.UITable_Measurement.Data = cell2table(Tcell);
             else
                 TcellCompact = Tcell(:,1:30);
@@ -281,7 +281,6 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
     methods (Access = public)       
         function updateTableRemote(app,TcellAcq)
             app.Tcell = TcellAcq;
-            %assignin("base","TcellAcq",TcellAcq);
             updateMeasurementTable(app);
         end
     end
@@ -449,6 +448,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             fullpathname = app.fullpathname; % full path for the imported files
             Tcell = []; % cell structure table
             DEBUGMsgLabel = app.DEBUGMsgLabel; % Debug message label handler
+            app.NumberPrefixSwitch.Value = "On";
             uiFigure = app.CaTxUIFigure;
             app.manualMode = 0;
 
@@ -626,7 +626,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             fullfile = strcat(filepath,filename);
             delete(fullfile);
             measNum = app.Tcell{1,end};
-            incNum = app.NumberPrefixSwitch.Value;
+            numPrefix = app.NumberPrefixSwitch.Value;
             varsAttr = ["time","mode","coordinates","mdDescription","md1","md2","md3","md4","md5","md6","md7","thzVer"];
             digitNum = ceil(log10(measNum+1));
             digitNumFormat = strcat('%0',num2str(digitNum),'d');
@@ -646,7 +646,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
 
             for idx = 1:measNum
                 
-                if isequal(incNum,"On") % prefix numbers to group name
+                if isequal(numPrefix,"On") % prefix number "On" or "Off"
                     dn = strcat('/',sprintf(digitNumFormat,app.Tcell{1,idx}),':',app.Tcell{2,idx});
                 else
                     dn = strcat('/',app.Tcell{2,idx});
@@ -727,6 +727,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
         function ImportthzFileButtonPushed(app, event)
             ClearMemoryButtonPushed(app);
             app.manualMode = 0;
+            app.NumberPrefixSwitch.Value = "Off";
             
             if ~isempty(app.Tcell)
                 return;
@@ -1348,12 +1349,12 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             app.AcquirefromTeraSmartButton.Enable = "off";
 
             try
-                startCol = size(app.Tcell,2);
+                Tcell = app.Tcell;
             catch
-                startCol = 1;
+                Tcell = [];
             end
 
-            app.DialogApp = AcquisitionDialog(app,startCol);
+            app.DialogApp = AcquisitionDialog(app,Tcell);
         end
 
         % Close request function: CaTxUIFigure
