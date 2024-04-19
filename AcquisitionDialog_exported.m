@@ -286,6 +286,8 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             % Enable Acquire button in main app, if the app is still open
             if isvalid(app.MainApp)
                 app.MainApp.AcquirefromTeraSmartButton.Enable = "on";
+                app.MainApp.DeployDataButton.Enable = "on";
+                app.MainApp.ClearMemoryButton.Enable = "on";
             end
 
             % Delete the dialog box

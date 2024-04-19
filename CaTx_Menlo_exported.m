@@ -1347,6 +1347,8 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
         function AcquirefromTeraSmartButtonPushed(app, event)
             % Disable Acqire button while dialog is open
             app.AcquirefromTeraSmartButton.Enable = "off";
+            app.DeployDataButton.Enable = "off";
+            app.ClearMemoryButton.Enable = "off";
 
             try
                 Tcell = app.Tcell;
