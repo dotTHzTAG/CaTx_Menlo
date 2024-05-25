@@ -281,6 +281,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
     methods (Access = public)       
         function updateTableRemote(app,TcellAcq)
             app.Tcell = TcellAcq;
+            % display("Table Update from Remote App");
             updateMeasurementTable(app);
         end
     end
@@ -646,7 +647,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
 
             for idx = 1:measNum
                 
-                if isequal(numPrefix,"On") % prefix number "On" or "Off"
+                if isequal(numPrefix,"On") % prefix number "On"
                     dn = strcat('/',sprintf(digitNumFormat,app.Tcell{1,idx}),':',app.Tcell{2,idx});
                 else
                     dn = strcat('/',app.Tcell{2,idx});
