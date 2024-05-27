@@ -78,9 +78,9 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         function addMeasurement(app) % single scan#
                 numAcq = app.numAcq;
                 fig = app.AcquisitionDialogUIFigure;
-
+                single = false;
                 curCol = size(app.TcellAcq,2);
-                measMat = readWaveform(app);
+                measMat = readWaveform(app,single);
                 measNum = size(measMat,1);
                 TcellNew = cell(22,measNum);
                 numAcq = numAcq + measNum;
@@ -196,12 +196,18 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                 app.numAcq = numAcq;
         end
         
-        function measMat = readWaveform(app)
+        function measMat = readWaveform(app,single)
             measAverage = app.AverageNumberEditField.Value;
             measTime = app.TimesecEditField.Value;
-            measCount = app.AcqusitionCountEditField.Value;
-            measMode = app.ModeSwitch.Value;
 
+            if single
+                measCount = 1;
+                measMode = 'Count';
+            else
+                measCount = app.AcqusitionCountEditField.Value;
+                measMode = app.ModeSwitch.Value;
+            end
+            
             if isequal(measMode,'Count')
                 cMode = true;
             else
@@ -324,9 +330,9 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
         % Button pushed function: BaselineButton
         function BaselineButtonPushed(app, event)
-            
+            single = true;
             try
-                app.matBaseline = readWaveform(app);
+                app.matBaseline = readWaveform(app,single);
             catch
                 app.BaselineLamp.Color = [0.85,0.33,0.10];
                 return
@@ -338,9 +344,9 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
         % Button pushed function: ReferenceButton
         function ReferenceButtonPushed(app, event)
-            
+            single = true;
             try
-                app.matReference = readWaveform(app);
+                app.matReference = readWaveform(app,single);
             catch
                 app.ReferenceLamp.Color = [0.85,0.33,0.10];
                 return
