@@ -78,7 +78,6 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                 timeAxis = table2array(measMat(1,2:end));
                 eAmp = table2array(measMat(2:end,2:end));
                 timeStamps = table2array(measMat(2:end,1));
-                assignin("base","timeStamps",timeStamps);
                 clear("measMat");
 
                 measNum = size(eAmp,1);
@@ -194,7 +193,6 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                 end
 
                 updateTcellAcq(app,TcellNew);
-                assignin("base","TcellNew",TcellNew);
                 app.numAcq = numAcq;
         end
         
