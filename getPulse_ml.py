@@ -1,51 +1,121 @@
 from scancontrolclient import ScanControlClient
 import time
 import base64
+import csv
 import numpy as np
+from datetime import datetime
+from astropy.io import ascii
+from astropy.table import Table
+
+# address="10.0.2.74"       # set IP address of system to use
+address="localhost"         # use this instead of IP address if running code directly on machine
 
 # Scan options
-# address="10.0.2.74"      # set IP address of system to use
-address="localhost"         # use this instead of IP address if running code directly on machine
-averages = [50,50,50,1]           # number of averages to perform, ex: [10000, 5000, 3000, ..., 2, 1]
-#averages = [2]
+measurement_average = 100
+measurement_time = 6  # measurement period in seconds
+measurement_count = 5 # total measurement count
+count_mode = False
 
+print('measurement_average =',str(int(measurement_average)))
 
-tData = []
+if count_mode:
+    print('Measurement mode: Count with '+ str(int(measurement_count))+' count(s)')
+else:
+    print('Measurement mode: Time with ' + str("{:.3f}".format(measurement_time))+'second(s)')
+    
+vecData = []
 EData = []
-i=0
+i=1
 avgReset = False
+measurement_table = Table()
+FileName = 'measurements.csv'
+
+
 
 #%%
 def getPulse(data):
-    global i, averages, tData, EData, avgReset
+    global i, measurement_average, measurement_time, measurement_count, measurement_table
+    global tData, EData, start_time, count_mode, avgReset, current_rate,vecData
+    ScanControl.setDesiredAverages(measurement_average)
     numAvg = ScanControl.currentAverages
-    current_status = ScanControl.status
-    ScanControl.setDesiredAverages(averages[i])
-    print('current_status = '+str(current_status)+'::'+'current_average = ' + str(numAvg))
+    current_rate = ScanControl.rate
     
-    if numAvg < averages[i] or 1 == averages[i]:
+    if numAvg < measurement_average or 1 == measurement_average:
         avgReset = True
     
-    if numAvg == averages[i] and avgReset:
+    if numAvg == measurement_average and avgReset:
         avgReset = False
-        tAxis=np.asarray(np.frombuffer(base64.b64decode(ScanControl.timeAxis), dtype=np.float64)) # import time axis (x-axis)
-        E1=data['amplitude'][0] # import E-field data (time)
-        EData.append(E1) # save raw data for export
-        tData.append(tAxis)
-        i=i+1
-        print(str(i)+' of '+str(len(averages))+' measured.')
-        ScanControl.resetAveraging()
-        numAvg = ScanControl.currentAverages
-        current_status = ScanControl.status
-        print('current_status = '+str(current_status)+'::'+'current_average = ' + str(numAvg))
-       
+#        print('current_rate =  ' +  str(current_rate))
         
-    if len(EData)==len(averages): 
-        ScanControl.stop()
-        client.loop.stop()
-        print("Measurements done!")
-        
-
+        if count_mode:            
+            if i<=measurement_count:
+                if i == 1:
+                    timeAxis=np.asarray(np.frombuffer(base64.b64decode(ScanControl.timeAxis), dtype=np.float64)) # import time axis (x-axis)
+                    timeAxis = np.insert(timeAxis,0,0)
+                    vecData = timeAxis
+                    with open(FileName,'w', newline='') as f_meas:
+                        writer = csv.writer(f_meas)
+                        writer.writerow(vecData)
+                    
+                ms = round(time.time()*1000) # measurement time in milliseconds
+                eAmp = data['amplitude'][0] # import E-field data (column title: milliseconds)
+                eAmp = np.insert(eAmp,0,ms)
+                vecData = eAmp
+                with open(FileName,'a', newline='') as f_meas:
+                    writer = csv.writer(f_meas)
+                    writer.writerow(vecData)
+                ScanControl.resetAveraging()
+                print(str(i)+' of '+str(measurement_count)+' measured.')
+                with open('progress.txt','w') as f_prog:
+                    progress_message = f"Progress: {i} of {measurement_count} counts"
+                    f_prog.write(progress_message + "\n")
+                    f_prog.flush()
+                i=i+1
+            else:
+                ScanControl.resetAveraging()
+                ScanControl.stop()
+                client.loop.stop()   
+                print(str(i-1)+" measurements done!")                         
+                with open('progress.txt','w') as f:
+                    progress_message = "Measurement done!"
+                    f.write(progress_message + "\n")
+                    f.flush()
+        else: # time_mode
+            if i==1:
+                start_time = datetime.now()
+                timeAxis=np.asarray(np.frombuffer(base64.b64decode(ScanControl.timeAxis), dtype=np.float64)) # import time axis (x-axis)
+                timeAxis = np.insert(timeAxis,0,0)
+                vecData = timeAxis
+                with open(FileName,'w', newline='') as f_meas:
+                    writer = csv.writer(f_meas)
+                    writer.writerow(vecData)
+            
+            total_seconds = (datetime.now()-start_time).total_seconds()    
+            if  total_seconds <= measurement_time:
+                ms = round(time.time()*1000) # measurement time in milliseconds
+                eAmp = data['amplitude'][0] # import E-field data (column title: milliseconds)
+                eAmp = np.insert(eAmp,0,ms)
+                vecData = eAmp
+                
+                with open(FileName,'a', newline='') as f_meas:
+                    writer = csv.writer(f_meas)
+                    writer.writerow(vecData)
+                ScanControl.resetAveraging()
+                print(str(total_seconds)+' of '+str(measurement_time)+' seconds')
+                with open('progress.txt','w') as f_prog:
+                    progress_message = f"Progress: {i} of {measurement_time} seconds"
+                    f_prog.write(progress_message + "\n")
+                    f_prog.flush()
+                i=i+1                
+            else:
+                ScanControl.resetAveraging()
+                ScanControl.stop()
+                client.loop.stop()          
+                with open('progress.txt','w') as f:
+                    progress_message = "Measurement done!"
+                    f.write(progress_message + "\n")
+                    f.flush()
+                print(str(i-1)+ " measurements done!")
 
 #%%
 
@@ -56,4 +126,3 @@ ScanControl.resetAveraging()
 client.loop.run_until_complete(ScanControl.start())
 ScanControl.pulseReady.connect(getPulse)
 client.loop.run_forever()
-output = [tData, EData]
