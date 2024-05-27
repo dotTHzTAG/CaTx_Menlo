@@ -3,39 +3,45 @@ import time
 import base64
 import csv
 import numpy as np
+import argparse
 from datetime import datetime
-from astropy.io import ascii
-from astropy.table import Table
+
 
 # address="10.0.2.74"       # set IP address of system to use
 address="localhost"         # use this instead of IP address if running code directly on machine
 
+# create the argument parser
+parser = argparse.ArgumentParser(description = 'average, time, count, count_mode')
+
+# add arguments
+parser.add_argument('average', type = int, help = 'measurement_average')
+parser.add_argument('time', type = int, help = 'measurement_time (seconds)')
+parser.add_argument('count', type = int, help = 'measurement_count')
+parser.add_argument('mode', type =int, help = 'count_mode (0 or 1)')
+args = parser.parse_args()
+
 # Scan options
-measurement_average = 100
-measurement_time = 6  # measurement period in seconds
-measurement_count = 5 # total measurement count
-count_mode = False
+measurement_average = args.average
+measurement_time = args.time  # measurement period in seconds
+measurement_count = args.count # total measurement count
+count_mode = args.mode # Ture for count_mode
 
 print('measurement_average =',str(int(measurement_average)))
 
-if count_mode:
+if count_mode > 0:
     print('Measurement mode: Count with '+ str(int(measurement_count))+' count(s)')
 else:
     print('Measurement mode: Time with ' + str("{:.3f}".format(measurement_time))+'second(s)')
     
 vecData = []
-EData = []
 i=1
 avgReset = False
-measurement_table = Table()
 FileName = 'measurements.csv'
-
-
 
 #%%
 def getPulse(data):
-    global i, measurement_average, measurement_time, measurement_count, measurement_table
-    global tData, EData, start_time, count_mode, avgReset, current_rate,vecData
+    global i, measurement_average, measurement_time, measurement_count
+    global tData, EData, start_time, count_mode, avgReset, current_rate, vecData
     ScanControl.setDesiredAverages(measurement_average)
     numAvg = ScanControl.currentAverages
     current_rate = ScanControl.rate
@@ -57,7 +63,7 @@ def getPulse(data):
                         writer = csv.writer(f_meas)
                         writer.writerow(vecData)
                     
-                ms = round(time.time()*1000) # measurement time in milliseconds
+                ms = round(time.time()*1000)/1000 # measurement time in milliseconds
                 eAmp = data['amplitude'][0] # import E-field data (column title: milliseconds)
                 eAmp = np.insert(eAmp,0,ms)
                 vecData = eAmp
@@ -68,17 +74,17 @@ def getPulse(data):
                 print(str(i)+' of '+str(measurement_count)+' measured.')
                 with open('progress.txt','w') as f_prog:
                     progress_message = f"Progress: {i} of {measurement_count} counts"
-                    f_prog.write(progress_message + "\n")
+                    f_prog.write(progress_message)
                     f_prog.flush()
                 i=i+1
             else:
                 ScanControl.resetAveraging()
                 ScanControl.stop()
                 client.loop.stop()   
-                print(str(i-1)+" measurements done!")                         
+                print(f"{i-1} measurements done!")                         
                 with open('progress.txt','w') as f:
-                    progress_message = "Measurement done!"
-                    f.write(progress_message + "\n")
+                    progress_message = f"{i-1} measurements done!"
+                    f.write(progress_message)
                     f.flush()
         else: # time_mode
             if i==1:
@@ -112,10 +118,10 @@ def getPulse(data):
                 ScanControl.stop()
                 client.loop.stop()          
                 with open('progress.txt','w') as f:
-                    progress_message = "Measurement done!"
-                    f.write(progress_message + "\n")
+                    progress_message = f"{i-1} measurements done!"
+                    f.write(progress_message)
                     f.flush()
-                print(str(i-1)+ " measurements done!")
+                print(f"{i-1} measurements done!")
 
 #%%
 
