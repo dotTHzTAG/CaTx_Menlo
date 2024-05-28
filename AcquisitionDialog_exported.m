@@ -3,18 +3,12 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
     % Properties that correspond to app components
     properties (Access = public)
         AcquisitionDialogUIFigure       matlab.ui.Figure
-        MeasurementSettingsPanel        matlab.ui.container.Panel
-        MultiscanSwitch                 matlab.ui.control.Switch
-        MultiscanSwitchLabel            matlab.ui.control.Label
-        MeasurementCountEditField       matlab.ui.control.NumericEditField
-        MeasurementCountEditFieldLabel  matlab.ui.control.Label
-        TimesecEditField                matlab.ui.control.NumericEditField
-        TimesecEditFieldLabel           matlab.ui.control.Label
-        AverageNumberEditField          matlab.ui.control.NumericEditField
-        IntervalsecLabel                matlab.ui.control.Label
-        SystemReadyLamp                 matlab.ui.control.Lamp
+        Image                           matlab.ui.control.Image
         SystemReadyLampLabel            matlab.ui.control.Label
+        SystemReadyLamp                 matlab.ui.control.Lamp
         MeasurementDetailsPanel         matlab.ui.container.Panel
+        STOPButton                      matlab.ui.control.Button
+        ACQUIREButton                   matlab.ui.control.Button
         NumericValueEditField_2         matlab.ui.control.NumericEditField
         NumericValueEditFieldLabel      matlab.ui.control.Label
         Metadata2EditField              matlab.ui.control.EditField
@@ -23,27 +17,33 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         NumericValueEditField_2Label    matlab.ui.control.Label
         Metadata1EditField              matlab.ui.control.EditField
         Metadata1EditFieldLabel         matlab.ui.control.Label
-        ModeDropDown                    matlab.ui.control.DropDown
-        ModeDropDownLabel               matlab.ui.control.Label
         DescriptionEditField            matlab.ui.control.EditField
         DescriptionEditFieldLabel       matlab.ui.control.Label
+        ModeDropDown                    matlab.ui.control.DropDown
+        ModeDropDownLabel               matlab.ui.control.Label
         SampleEditField                 matlab.ui.control.EditField
         SampleEditFieldLabel            matlab.ui.control.Label
-        STOPButton                      matlab.ui.control.Button
-        ACQUIREButton                   matlab.ui.control.Button
         ReferenceAcquisitionPanel       matlab.ui.container.Panel
-        ReferenceLamp                   matlab.ui.control.Lamp
-        ReferenceLampLabel              matlab.ui.control.Label
-        BaselineLamp                    matlab.ui.control.Lamp
-        BaselineLampLabel               matlab.ui.control.Label
-        SubtractBaselineCheckBox        matlab.ui.control.CheckBox
+        MeasurementSettingsPanel        matlab.ui.container.Panel
+        TimesecEditField                matlab.ui.control.NumericEditField
+        TimesecEditFieldLabel           matlab.ui.control.Label
+        AverageNumberEditField          matlab.ui.control.NumericEditField
+        IntervalsecLabel                matlab.ui.control.Label
+        MeasurementCountEditField       matlab.ui.control.NumericEditField
+        MeasurementCountEditFieldLabel  matlab.ui.control.Label
+        MultiscanSwitch                 matlab.ui.control.Switch
+        MultiscanSwitchLabel            matlab.ui.control.Label
         RemoveReferenceButton           matlab.ui.control.Button
         ReferenceButton                 matlab.ui.control.Button
+        ReferenceLamp                   matlab.ui.control.Lamp
+        ReferenceLampLabel              matlab.ui.control.Label
         RemoveBaselineButton            matlab.ui.control.Button
         BaselineButton                  matlab.ui.control.Button
+        BaselineLamp                    matlab.ui.control.Lamp
         StatusEditField                 matlab.ui.control.EditField
-        Image                           matlab.ui.control.Image
         StatusButton                    matlab.ui.control.Button
+        BaselineLampLabel               matlab.ui.control.Label
+        SubtractBaselineCheckBox        matlab.ui.control.CheckBox
     end
 
     
@@ -207,16 +207,14 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             measurementFile = 'measurements.csv';
             pythonRun = true;
             
-            if isequal(measMode,'Count')
-                cMode = 1;
-            else
-                cMode = 0;
-            end
-            
             if single
-                command = sprintf('python %s %i %i %i %i',pythonScript,measAverage,measTime,1,1);
+                command = sprintf('python %s --average %i', pythonScript, measAverage);
             else
-                command = sprintf('python %s %i %i %i %i &',pythonScript,measAverage,measTime,measCount,cMode);
+                if isequal(measMode,'count')
+                    command = sprintf('python %s --average %i --count %i &', pythonScript, measAverage, measCount);
+                else
+                    command = sprintf('python %s --average %i --time %i &', pythonScript, measAverage, measTime);
+                end
             end
 
             system(command);
@@ -382,7 +380,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         function MultiscanSwitchValueChanged(app, event)
             value = app.MultiscanSwitch.Value;
 
-            if isequal(value,'Count')
+            if isequal(value,'count')
                 app.TimesecEditField.Editable = "off";
                 app.MeasurementCountEditField.Editable = "on";
                 app.MeasurementCountEditField.BackgroundColor = [0.302 0.7451 0.9333];
@@ -422,16 +420,79 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.StatusButton.Position = [17 500 59 27];
             app.StatusButton.Text = 'Status';
 
-            % Create Image
-            app.Image = uiimage(app.AcquisitionDialogUIFigure);
-            app.Image.Position = [252 5 167 38];
-            app.Image.ImageSource = fullfile(pathToMLAPP, 'MENLO-Logo.png');
-
             % Create StatusEditField
             app.StatusEditField = uieditfield(app.AcquisitionDialogUIFigure, 'text');
             app.StatusEditField.Editable = 'off';
             app.StatusEditField.BackgroundColor = [0.9412 0.9412 0.9412];
             app.StatusEditField.Position = [86 501 330 26];
+
+            % Create MeasurementSettingsPanel
+            app.MeasurementSettingsPanel = uipanel(app.AcquisitionDialogUIFigure);
+            app.MeasurementSettingsPanel.Title = 'Measurement Settings';
+            app.MeasurementSettingsPanel.FontWeight = 'bold';
+            app.MeasurementSettingsPanel.Position = [15 403 409 88];
+
+            % Create MultiscanSwitchLabel
+            app.MultiscanSwitchLabel = uilabel(app.MeasurementSettingsPanel);
+            app.MultiscanSwitchLabel.HorizontalAlignment = 'center';
+            app.MultiscanSwitchLabel.FontWeight = 'bold';
+            app.MultiscanSwitchLabel.Position = [5 37 64 22];
+            app.MultiscanSwitchLabel.Text = 'Multi-scan';
+
+            % Create MultiscanSwitch
+            app.MultiscanSwitch = uiswitch(app.MeasurementSettingsPanel, 'slider');
+            app.MultiscanSwitch.Items = {'count', 'time'};
+            app.MultiscanSwitch.ValueChangedFcn = createCallbackFcn(app, @MultiscanSwitchValueChanged, true);
+            app.MultiscanSwitch.FontWeight = 'bold';
+            app.MultiscanSwitch.Position = [116 37 43 19];
+            app.MultiscanSwitch.Value = 'count';
+
+            % Create MeasurementCountEditFieldLabel
+            app.MeasurementCountEditFieldLabel = uilabel(app.MeasurementSettingsPanel);
+            app.MeasurementCountEditFieldLabel.HorizontalAlignment = 'right';
+            app.MeasurementCountEditFieldLabel.FontWeight = 'bold';
+            app.MeasurementCountEditFieldLabel.Position = [206 36 120 22];
+            app.MeasurementCountEditFieldLabel.Text = 'Measurement Count';
+
+            % Create MeasurementCountEditField
+            app.MeasurementCountEditField = uieditfield(app.MeasurementSettingsPanel, 'numeric');
+            app.MeasurementCountEditField.Limits = [0 100000];
+            app.MeasurementCountEditField.ValueDisplayFormat = '%.0f';
+            app.MeasurementCountEditField.FontWeight = 'bold';
+            app.MeasurementCountEditField.BackgroundColor = [0.302 0.7451 0.9333];
+            app.MeasurementCountEditField.Position = [332 36 67 22];
+            app.MeasurementCountEditField.Value = 1;
+
+            % Create IntervalsecLabel
+            app.IntervalsecLabel = uilabel(app.MeasurementSettingsPanel);
+            app.IntervalsecLabel.HorizontalAlignment = 'right';
+            app.IntervalsecLabel.FontWeight = 'bold';
+            app.IntervalsecLabel.Position = [2 8 101 22];
+            app.IntervalsecLabel.Text = 'Average Number';
+
+            % Create AverageNumberEditField
+            app.AverageNumberEditField = uieditfield(app.MeasurementSettingsPanel, 'numeric');
+            app.AverageNumberEditField.Limits = [0 10000];
+            app.AverageNumberEditField.ValueDisplayFormat = '%.0f';
+            app.AverageNumberEditField.FontWeight = 'bold';
+            app.AverageNumberEditField.BackgroundColor = [0.9294 0.6941 0.1255];
+            app.AverageNumberEditField.Position = [110 8 66 22];
+            app.AverageNumberEditField.Value = 1;
+
+            % Create TimesecEditFieldLabel
+            app.TimesecEditFieldLabel = uilabel(app.MeasurementSettingsPanel);
+            app.TimesecEditFieldLabel.HorizontalAlignment = 'right';
+            app.TimesecEditFieldLabel.FontWeight = 'bold';
+            app.TimesecEditFieldLabel.Position = [207 8 64 22];
+            app.TimesecEditFieldLabel.Text = 'Time (sec)';
+
+            % Create TimesecEditField
+            app.TimesecEditField = uieditfield(app.MeasurementSettingsPanel, 'numeric');
+            app.TimesecEditField.Limits = [0 100000];
+            app.TimesecEditField.ValueDisplayFormat = '%.0f';
+            app.TimesecEditField.Editable = 'off';
+            app.TimesecEditField.FontWeight = 'bold';
+            app.TimesecEditField.Position = [332 8 67 22];
 
             % Create ReferenceAcquisitionPanel
             app.ReferenceAcquisitionPanel = uipanel(app.AcquisitionDialogUIFigure);
@@ -439,34 +500,6 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.ReferenceAcquisitionPanel.FontWeight = 'bold';
             app.ReferenceAcquisitionPanel.FontSize = 13;
             app.ReferenceAcquisitionPanel.Position = [15 270 409 126];
-
-            % Create BaselineButton
-            app.BaselineButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
-            app.BaselineButton.ButtonPushedFcn = createCallbackFcn(app, @BaselineButtonPushed, true);
-            app.BaselineButton.FontWeight = 'bold';
-            app.BaselineButton.Position = [101 43 135 27];
-            app.BaselineButton.Text = 'Baseline';
-
-            % Create RemoveBaselineButton
-            app.RemoveBaselineButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
-            app.RemoveBaselineButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveBaselineButtonPushed, true);
-            app.RemoveBaselineButton.FontWeight = 'bold';
-            app.RemoveBaselineButton.Position = [245 43 156 27];
-            app.RemoveBaselineButton.Text = 'Remove Baseline';
-
-            % Create ReferenceButton
-            app.ReferenceButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
-            app.ReferenceButton.ButtonPushedFcn = createCallbackFcn(app, @ReferenceButtonPushed, true);
-            app.ReferenceButton.FontWeight = 'bold';
-            app.ReferenceButton.Position = [101 9 135 27];
-            app.ReferenceButton.Text = 'Reference';
-
-            % Create RemoveReferenceButton
-            app.RemoveReferenceButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
-            app.RemoveReferenceButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveReferenceButtonPushed, true);
-            app.RemoveReferenceButton.FontWeight = 'bold';
-            app.RemoveReferenceButton.Position = [245 9 155 27];
-            app.RemoveReferenceButton.Text = 'Remove Reference';
 
             % Create SubtractBaselineCheckBox
             app.SubtractBaselineCheckBox = uicheckbox(app.ReferenceAcquisitionPanel);
@@ -485,6 +518,20 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.BaselineLamp.Position = [70 46 20 20];
             app.BaselineLamp.Color = [0.851 0.3294 0.102];
 
+            % Create BaselineButton
+            app.BaselineButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
+            app.BaselineButton.ButtonPushedFcn = createCallbackFcn(app, @BaselineButtonPushed, true);
+            app.BaselineButton.FontWeight = 'bold';
+            app.BaselineButton.Position = [101 43 135 27];
+            app.BaselineButton.Text = 'Baseline';
+
+            % Create RemoveBaselineButton
+            app.RemoveBaselineButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
+            app.RemoveBaselineButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveBaselineButtonPushed, true);
+            app.RemoveBaselineButton.FontWeight = 'bold';
+            app.RemoveBaselineButton.Position = [245 43 156 27];
+            app.RemoveBaselineButton.Text = 'Remove Baseline';
+
             % Create ReferenceLampLabel
             app.ReferenceLampLabel = uilabel(app.ReferenceAcquisitionPanel);
             app.ReferenceLampLabel.HorizontalAlignment = 'right';
@@ -496,32 +543,26 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.ReferenceLamp.Position = [70 12 20 20];
             app.ReferenceLamp.Color = [0.851 0.3255 0.098];
 
+            % Create ReferenceButton
+            app.ReferenceButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
+            app.ReferenceButton.ButtonPushedFcn = createCallbackFcn(app, @ReferenceButtonPushed, true);
+            app.ReferenceButton.FontWeight = 'bold';
+            app.ReferenceButton.Position = [101 9 135 27];
+            app.ReferenceButton.Text = 'Reference';
+
+            % Create RemoveReferenceButton
+            app.RemoveReferenceButton = uibutton(app.ReferenceAcquisitionPanel, 'push');
+            app.RemoveReferenceButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveReferenceButtonPushed, true);
+            app.RemoveReferenceButton.FontWeight = 'bold';
+            app.RemoveReferenceButton.Position = [245 9 155 27];
+            app.RemoveReferenceButton.Text = 'Remove Reference';
+
             % Create MeasurementDetailsPanel
             app.MeasurementDetailsPanel = uipanel(app.AcquisitionDialogUIFigure);
             app.MeasurementDetailsPanel.Title = 'Measurement Details';
             app.MeasurementDetailsPanel.FontWeight = 'bold';
             app.MeasurementDetailsPanel.FontSize = 13;
             app.MeasurementDetailsPanel.Position = [16 48 409 212];
-
-            % Create ACQUIREButton
-            app.ACQUIREButton = uibutton(app.MeasurementDetailsPanel, 'push');
-            app.ACQUIREButton.ButtonPushedFcn = createCallbackFcn(app, @ACQUIREButtonPushed, true);
-            app.ACQUIREButton.BackgroundColor = [1 1 1];
-            app.ACQUIREButton.FontSize = 14;
-            app.ACQUIREButton.FontWeight = 'bold';
-            app.ACQUIREButton.FontColor = [0 0.4471 0.7412];
-            app.ACQUIREButton.Position = [17 12 185 33];
-            app.ACQUIREButton.Text = 'ACQUIRE';
-
-            % Create STOPButton
-            app.STOPButton = uibutton(app.MeasurementDetailsPanel, 'push');
-            app.STOPButton.ButtonPushedFcn = createCallbackFcn(app, @STOPButtonPushed, true);
-            app.STOPButton.BackgroundColor = [1 1 1];
-            app.STOPButton.FontSize = 14;
-            app.STOPButton.FontWeight = 'bold';
-            app.STOPButton.FontColor = [0.851 0.3255 0.098];
-            app.STOPButton.Position = [213 12 185 33];
-            app.STOPButton.Text = 'STOP';
 
             % Create SampleEditFieldLabel
             app.SampleEditFieldLabel = uilabel(app.MeasurementDetailsPanel);
@@ -532,16 +573,6 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             % Create SampleEditField
             app.SampleEditField = uieditfield(app.MeasurementDetailsPanel, 'text');
             app.SampleEditField.Position = [82 155 163 22];
-
-            % Create DescriptionEditFieldLabel
-            app.DescriptionEditFieldLabel = uilabel(app.MeasurementDetailsPanel);
-            app.DescriptionEditFieldLabel.HorizontalAlignment = 'right';
-            app.DescriptionEditFieldLabel.Position = [9 123 65 22];
-            app.DescriptionEditFieldLabel.Text = 'Description';
-
-            % Create DescriptionEditField
-            app.DescriptionEditField = uieditfield(app.MeasurementDetailsPanel, 'text');
-            app.DescriptionEditField.Position = [81 123 310 22];
 
             % Create ModeDropDownLabel
             app.ModeDropDownLabel = uilabel(app.MeasurementDetailsPanel);
@@ -554,6 +585,16 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.ModeDropDown.Items = {'TX', 'RX'};
             app.ModeDropDown.Position = [306 155 83 22];
             app.ModeDropDown.Value = 'TX';
+
+            % Create DescriptionEditFieldLabel
+            app.DescriptionEditFieldLabel = uilabel(app.MeasurementDetailsPanel);
+            app.DescriptionEditFieldLabel.HorizontalAlignment = 'right';
+            app.DescriptionEditFieldLabel.Position = [9 123 65 22];
+            app.DescriptionEditFieldLabel.Text = 'Description';
+
+            % Create DescriptionEditField
+            app.DescriptionEditField = uieditfield(app.MeasurementDetailsPanel, 'text');
+            app.DescriptionEditField.Position = [81 123 310 22];
 
             % Create Metadata1EditFieldLabel
             app.Metadata1EditFieldLabel = uilabel(app.MeasurementDetailsPanel);
@@ -595,82 +636,39 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.NumericValueEditField_2 = uieditfield(app.MeasurementDetailsPanel, 'numeric');
             app.NumericValueEditField_2.Position = [318 60 70 22];
 
-            % Create SystemReadyLampLabel
-            app.SystemReadyLampLabel = uilabel(app.AcquisitionDialogUIFigure);
-            app.SystemReadyLampLabel.Position = [60 13 83 22];
-            app.SystemReadyLampLabel.Text = 'System Ready';
+            % Create ACQUIREButton
+            app.ACQUIREButton = uibutton(app.MeasurementDetailsPanel, 'push');
+            app.ACQUIREButton.ButtonPushedFcn = createCallbackFcn(app, @ACQUIREButtonPushed, true);
+            app.ACQUIREButton.BackgroundColor = [1 1 1];
+            app.ACQUIREButton.FontSize = 14;
+            app.ACQUIREButton.FontWeight = 'bold';
+            app.ACQUIREButton.FontColor = [0 0.4471 0.7412];
+            app.ACQUIREButton.Position = [17 12 185 33];
+            app.ACQUIREButton.Text = 'ACQUIRE';
+
+            % Create STOPButton
+            app.STOPButton = uibutton(app.MeasurementDetailsPanel, 'push');
+            app.STOPButton.ButtonPushedFcn = createCallbackFcn(app, @STOPButtonPushed, true);
+            app.STOPButton.BackgroundColor = [1 1 1];
+            app.STOPButton.FontSize = 14;
+            app.STOPButton.FontWeight = 'bold';
+            app.STOPButton.FontColor = [0.851 0.3255 0.098];
+            app.STOPButton.Position = [213 12 185 33];
+            app.STOPButton.Text = 'STOP';
 
             % Create SystemReadyLamp
             app.SystemReadyLamp = uilamp(app.AcquisitionDialogUIFigure);
             app.SystemReadyLamp.Position = [31 15 20 20];
 
-            % Create MeasurementSettingsPanel
-            app.MeasurementSettingsPanel = uipanel(app.AcquisitionDialogUIFigure);
-            app.MeasurementSettingsPanel.Title = 'Measurement Settings';
-            app.MeasurementSettingsPanel.FontWeight = 'bold';
-            app.MeasurementSettingsPanel.Position = [15 403 409 88];
+            % Create SystemReadyLampLabel
+            app.SystemReadyLampLabel = uilabel(app.AcquisitionDialogUIFigure);
+            app.SystemReadyLampLabel.Position = [60 13 83 22];
+            app.SystemReadyLampLabel.Text = 'System Ready';
 
-            % Create IntervalsecLabel
-            app.IntervalsecLabel = uilabel(app.MeasurementSettingsPanel);
-            app.IntervalsecLabel.HorizontalAlignment = 'right';
-            app.IntervalsecLabel.FontWeight = 'bold';
-            app.IntervalsecLabel.Position = [2 8 101 22];
-            app.IntervalsecLabel.Text = 'Average Number';
-
-            % Create AverageNumberEditField
-            app.AverageNumberEditField = uieditfield(app.MeasurementSettingsPanel, 'numeric');
-            app.AverageNumberEditField.Limits = [0 10000];
-            app.AverageNumberEditField.ValueDisplayFormat = '%.0f';
-            app.AverageNumberEditField.FontWeight = 'bold';
-            app.AverageNumberEditField.BackgroundColor = [0.9294 0.6941 0.1255];
-            app.AverageNumberEditField.Position = [110 8 66 22];
-            app.AverageNumberEditField.Value = 1;
-
-            % Create TimesecEditFieldLabel
-            app.TimesecEditFieldLabel = uilabel(app.MeasurementSettingsPanel);
-            app.TimesecEditFieldLabel.HorizontalAlignment = 'right';
-            app.TimesecEditFieldLabel.FontWeight = 'bold';
-            app.TimesecEditFieldLabel.Position = [207 8 64 22];
-            app.TimesecEditFieldLabel.Text = 'Time (sec)';
-
-            % Create TimesecEditField
-            app.TimesecEditField = uieditfield(app.MeasurementSettingsPanel, 'numeric');
-            app.TimesecEditField.Limits = [0 100000];
-            app.TimesecEditField.ValueDisplayFormat = '%.0f';
-            app.TimesecEditField.Editable = 'off';
-            app.TimesecEditField.FontWeight = 'bold';
-            app.TimesecEditField.Position = [332 8 67 22];
-
-            % Create MeasurementCountEditFieldLabel
-            app.MeasurementCountEditFieldLabel = uilabel(app.MeasurementSettingsPanel);
-            app.MeasurementCountEditFieldLabel.HorizontalAlignment = 'right';
-            app.MeasurementCountEditFieldLabel.FontWeight = 'bold';
-            app.MeasurementCountEditFieldLabel.Position = [206 36 120 22];
-            app.MeasurementCountEditFieldLabel.Text = 'Measurement Count';
-
-            % Create MeasurementCountEditField
-            app.MeasurementCountEditField = uieditfield(app.MeasurementSettingsPanel, 'numeric');
-            app.MeasurementCountEditField.Limits = [0 100000];
-            app.MeasurementCountEditField.ValueDisplayFormat = '%.0f';
-            app.MeasurementCountEditField.FontWeight = 'bold';
-            app.MeasurementCountEditField.BackgroundColor = [0.302 0.7451 0.9333];
-            app.MeasurementCountEditField.Position = [332 36 67 22];
-            app.MeasurementCountEditField.Value = 1;
-
-            % Create MultiscanSwitchLabel
-            app.MultiscanSwitchLabel = uilabel(app.MeasurementSettingsPanel);
-            app.MultiscanSwitchLabel.HorizontalAlignment = 'center';
-            app.MultiscanSwitchLabel.FontWeight = 'bold';
-            app.MultiscanSwitchLabel.Position = [5 37 64 22];
-            app.MultiscanSwitchLabel.Text = 'Multi-scan';
-
-            % Create MultiscanSwitch
-            app.MultiscanSwitch = uiswitch(app.MeasurementSettingsPanel, 'slider');
-            app.MultiscanSwitch.Items = {'Count', 'Time'};
-            app.MultiscanSwitch.ValueChangedFcn = createCallbackFcn(app, @MultiscanSwitchValueChanged, true);
-            app.MultiscanSwitch.FontWeight = 'bold';
-            app.MultiscanSwitch.Position = [116 37 43 19];
-            app.MultiscanSwitch.Value = 'Count';
+            % Create Image
+            app.Image = uiimage(app.AcquisitionDialogUIFigure);
+            app.Image.Position = [252 5 167 38];
+            app.Image.ImageSource = fullfile(pathToMLAPP, 'MENLO-Logo.png');
 
             % Show the figure after all components are created
             app.AcquisitionDialogUIFigure.Visible = 'on';

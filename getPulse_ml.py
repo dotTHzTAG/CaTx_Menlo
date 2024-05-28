@@ -6,54 +6,64 @@ import numpy as np
 import argparse
 from datetime import datetime
 
-
 # address="10.0.2.74"       # set IP address of system to use
 address="localhost"         # use this instead of IP address if running code directly on machine
+waveform_average = 1
+measurement_time = 0
+measurement_count = 1
 
 # create the argument parser
-parser = argparse.ArgumentParser(description = 'average, time, count, count_mode')
+parser = argparse.ArgumentParser(description = 'average, mode, number(time or count)')
 
 # add arguments
-parser.add_argument('average', type = int, help = 'measurement_average')
-parser.add_argument('time', type = int, help = 'measurement_time (seconds)')
-parser.add_argument('count', type = int, help = 'measurement_count')
-parser.add_argument('mode', type =int, help = 'count_mode (0 or 1)')
+parser.add_argument('--average', type = int, help = 'waveform_average')
+
+# Create a mutually exclusive group for 'time' and 'count'
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--time', type=int, help='time in seconds')
+group.add_argument('--count', type=int, help='number of counts')
 args = parser.parse_args()
 
 # Scan options
-measurement_average = args.average
-measurement_time = args.time  # measurement period in seconds
-measurement_count = args.count # total measurement count
-count_mode = args.mode # Ture for count_mode
+if args.average is not None:
+    waveform_average = args.average
+    
+if args.time is not None:
+    measurement_time = args.time
+    
+if args.count is not None:
+    measurement_count = args.count
 
-print('measurement_average =',str(int(measurement_average)))
+print('waveform_average =',str(int(waveform_average)))
 
-if count_mode > 0:
-    print('Measurement mode: Count with '+ str(int(measurement_count))+' count(s)')
+if measurement_time == 0:
+    count_mode = True
+    print('Count mode with '+ str(int(measurement_count))+' count(s)')
 else:
-    print('Measurement mode: Time with ' + str("{:.3f}".format(measurement_time))+'second(s)')
+    count_mode = False
+    print('Time mode with ' + str("{:.3f}".format(measurement_time))+'second(s)')
     
 vecData = []
-i=1
 avgReset = False
 FileName = 'measurements.csv'
+i=1
 
 #%%
 def getPulse(data):
-    global i, measurement_average, measurement_time, measurement_count
+    global i, waveform_average, measurement_time, measurement_count
     global tData, EData, start_time, count_mode, avgReset, current_rate, vecData
-    ScanControl.setDesiredAverages(measurement_average)
+    ScanControl.setDesiredAverages(waveform_average)
     numAvg = ScanControl.currentAverages
     current_rate = ScanControl.rate
     
-    if numAvg < measurement_average or 1 == measurement_average:
+    if numAvg < waveform_average or 1 == waveform_average:
         avgReset = True
     
-    if numAvg == measurement_average and avgReset:
+    if numAvg == waveform_average and avgReset:
         avgReset = False
 #        print('current_rate =  ' +  str(current_rate))
         
-        if count_mode:            
+        if count_mode:
             if i<=measurement_count:
                 if i == 1:
                     timeAxis=np.asarray(np.frombuffer(base64.b64decode(ScanControl.timeAxis), dtype=np.float64)) # import time axis (x-axis)
@@ -78,7 +88,7 @@ def getPulse(data):
                     f_prog.flush()
                 i=i+1
             else:
-                ScanControl.resetAveraging()
+                #ScanControl.resetAveraging()
                 ScanControl.stop()
                 client.loop.stop()   
                 print(f"{i-1} measurements done!")                         
@@ -114,7 +124,7 @@ def getPulse(data):
                     f_prog.flush()
                 i=i+1                
             else:
-                ScanControl.resetAveraging()
+                #ScanControl.resetAveraging()
                 ScanControl.stop()
                 client.loop.stop()          
                 with open('progress.txt','w') as f:
