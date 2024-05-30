@@ -12,13 +12,13 @@
     <param.authnamewatermark>Jongmin Lee</param.authnamewatermark>
     <param.email>jl2112@cam.ac.uk</param.email>
     <param.company>University of Cambridge</param.company>
-    <param.summary>CaTx for Menlo System TeraSmart</param.summary>
+    <param.summary>CaTx for Menlo Systems</param.summary>
     <param.description />
-    <param.screenshot />
+    <param.screenshot>${PROJECT_ROOT}\CaTx_Menlo_splash.png</param.screenshot>
     <param.guid />
-    <param.installpath.string>\University of Cambridge\CaTx4MenloSystems\</param.installpath.string>
+    <param.installpath.string>\CaTx4MenloSystems</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
-    <param.logo />
+    <param.logo>${PROJECT_ROOT}\installer_image.png</param.logo>
     <param.install.notes />
     <param.target.install.notes />
     <param.intermediate>${PROJECT_ROOT}\CaTx4MenloSystems_1\for_testing</param.intermediate>
@@ -49,11 +49,8 @@
 	 input arguments</param.help.text>
     <unset>
       <param.description />
-      <param.screenshot />
       <param.guid />
-      <param.installpath.string />
       <param.installpath.combo />
-      <param.logo />
       <param.install.notes />
       <param.target.install.notes />
       <param.intermediate />

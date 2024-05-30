@@ -24,6 +24,15 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         SampleEditField                 matlab.ui.control.EditField
         SampleEditFieldLabel            matlab.ui.control.Label
         ReferenceAcquisitionPanel       matlab.ui.container.Panel
+        RemoveReferenceButton           matlab.ui.control.Button
+        ReferenceButton                 matlab.ui.control.Button
+        ReferenceLamp                   matlab.ui.control.Lamp
+        ReferenceLampLabel              matlab.ui.control.Label
+        RemoveBaselineButton            matlab.ui.control.Button
+        BaselineButton                  matlab.ui.control.Button
+        BaselineLamp                    matlab.ui.control.Lamp
+        BaselineLampLabel               matlab.ui.control.Label
+        SubtractBaselineCheckBox        matlab.ui.control.CheckBox
         MeasurementSettingsPanel        matlab.ui.container.Panel
         TimesecEditField                matlab.ui.control.NumericEditField
         TimesecEditFieldLabel           matlab.ui.control.Label
@@ -33,17 +42,8 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         MeasurementCountEditFieldLabel  matlab.ui.control.Label
         MultiscanSwitch                 matlab.ui.control.Switch
         MultiscanSwitchLabel            matlab.ui.control.Label
-        RemoveReferenceButton           matlab.ui.control.Button
-        ReferenceButton                 matlab.ui.control.Button
-        ReferenceLamp                   matlab.ui.control.Lamp
-        ReferenceLampLabel              matlab.ui.control.Label
-        RemoveBaselineButton            matlab.ui.control.Button
-        BaselineButton                  matlab.ui.control.Button
-        BaselineLamp                    matlab.ui.control.Lamp
         StatusEditField                 matlab.ui.control.EditField
         StatusButton                    matlab.ui.control.Button
-        BaselineLampLabel               matlab.ui.control.Label
-        SubtractBaselineCheckBox        matlab.ui.control.CheckBox
     end
 
     
@@ -93,6 +93,8 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                     mode = app.ModeDropDown.Value;
                     timeStamp = timeStamps(idx);
                     datetimeValue = datetime(timeStamp, 'ConvertFrom', 'posixtime');
+                    datetimeValue.Format = 'yyyy-MM-dd HH:mm:ss.SSS';
+                    datetimeValue = char(datetimeValue);
 
                     md1Des = app.Metadata1EditField.Value;
                     md2Des = app.Metadata2EditField.Value;
@@ -584,7 +586,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.ModeDropDown = uidropdown(app.MeasurementDetailsPanel);
             app.ModeDropDown.Items = {'TX', 'RX'};
             app.ModeDropDown.Position = [306 155 83 22];
-            app.ModeDropDown.Value = 'TX';
+            app.ModeDropDown.Value = 'RX';
 
             % Create DescriptionEditFieldLabel
             app.DescriptionEditFieldLabel = uilabel(app.MeasurementDetailsPanel);

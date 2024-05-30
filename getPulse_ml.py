@@ -74,7 +74,7 @@ def getPulse(data):
                         writer.writerow(vecData)
                     
                 ms = round(time.time()*1000)/1000 # measurement time in milliseconds
-                eAmp = data['amplitude'][0] # import E-field data (column title: milliseconds)
+                eAmp = data['amplitude'][0] # import E-field data
                 eAmp = np.insert(eAmp,0,ms)
                 vecData = eAmp
                 with open(FileName,'a', newline='') as f_meas:
@@ -108,8 +108,8 @@ def getPulse(data):
             
             total_seconds = (datetime.now()-start_time).total_seconds()    
             if  total_seconds <= measurement_time:
-                ms = round(time.time()*1000) # measurement time in milliseconds
-                eAmp = data['amplitude'][0] # import E-field data (column title: milliseconds)
+                ms = round(time.time()*1000)/1000 # measurement time in milliseconds
+                eAmp = data['amplitude'][0] # import E-field data
                 eAmp = np.insert(eAmp,0,ms)
                 vecData = eAmp
                 
