@@ -1,0 +1,42 @@
+A: Python environment settting
+ 1. Install Python 3.9.13 (May 17 2022) - compatible with MATLAB version > R2021b
+ - Install
+ - Customize installation
+ - Install laucher for all users check!
+ - Add Python 3.9 to PATH
+ - Options all check!
+ - Customize install location: Browse -> C:\Python\Python39
+ - Install -> complete
+
+2. Spyder IDE installation
+ - Lauch Spyder -> menu -> Tools -> Preferences -> Python Interpreter -> Default to C:\Python\Python39\Python.exe -> Apply -> OK
+ - (Windows command prompt) > pip install spyder-kernels==2.5.* (enter)
+
+3. Package installation
+ (Windows command prompt) <- Windows search "cmd" (enter)
+ - pip install PyQt5 (enter)
+ - pip install websockets (enter)
+ - pip install numpy (enter)
+ - pip install astropy (enter)
+
+B: Windows setting 
+ 4. Windows path setting
+ - Windows taskbar -> Search with 'environment variables' -> Edit the system environment variables
+ -> Advanced tab -> Environment Variables button -> New
+ -> Name: PYTHONPATH, Value: -> Browse directory: C:\Python\Python39\Lib\Site-packages (site-package directory)
+ -> OK -> OK
+
+C: CaTxMenlo Installation
+ 5. Copy all python scripts to \CaTxMenlo directory
+ - _pycache_ folder
+ - pywebchannel
+ - get_Pulse_ml.py
+ - scancontrolclient.py
+
+ 6. Install CaTxMenlo and copy Engine files 
+ - Engines directory
+
+ 7. Lauch CaTxMenlo.exe
+ 
+ 
+ 
