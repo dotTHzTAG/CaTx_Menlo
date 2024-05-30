@@ -586,7 +586,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.ModeDropDown = uidropdown(app.MeasurementDetailsPanel);
             app.ModeDropDown.Items = {'TX', 'RX'};
             app.ModeDropDown.Position = [306 155 83 22];
-            app.ModeDropDown.Value = 'RX';
+            app.ModeDropDown.Value = 'TX';
 
             % Create DescriptionEditFieldLabel
             app.DescriptionEditFieldLabel = uilabel(app.MeasurementDetailsPanel);
