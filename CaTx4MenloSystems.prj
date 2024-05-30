@@ -1,49 +1,98 @@
-<deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2326882549" file="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4MenloSystems.prj" location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo" name="CaTx4MenloSystems" target="target.mlapps" target-name="Package App">
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration file="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4MenloSystems.prj" location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo" name="CaTx4MenloSystems" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>CaTx4MenloSystems</param.appname>
-    <param.authnamewatermark>Jongmin</param.authnamewatermark>
+    <param.icon>${PROJECT_ROOT}\CaTx4MenloSystems_resources\icon.ico</param.icon>
+    <param.icons>
+      <file>${PROJECT_ROOT}\CaTx4MenloSystems_resources\icon_48.png</file>
+      <file>${PROJECT_ROOT}\CaTx4MenloSystems_resources\icon_32.png</file>
+      <file>${PROJECT_ROOT}\CaTx4MenloSystems_resources\icon_24.png</file>
+      <file>${PROJECT_ROOT}\CaTx4MenloSystems_resources\icon_16.png</file>
+    </param.icons>
+    <param.version>1.00</param.version>
+    <param.authnamewatermark>Terahertz Applications Group</param.authnamewatermark>
     <param.email>jl2112@cam.ac.uk</param.email>
     <param.company>University of Cambridge</param.company>
-    <param.icon />
-    <param.icons />
-    <param.summary>CaTx with Menlo Systems TeraSmart Control</param.summary>
+    <param.summary>CaTx for Menlo Systems Users</param.summary>
     <param.description />
-    <param.screenshot>C:\Users\Jongmin Lee\AppData\Local\Temp\tpd7792861_52e2_4cea_b146_dc16a675cc96.png</param.screenshot>
-    <param.version>1.00</param.version>
-    <param.products.name />
-    <param.products.id />
-    <param.products.version />
-    <param.platforms />
-    <param.output>${PROJECT_ROOT}\Package</param.output>
-    <param.guid>edb19c93-6c90-4d23-be44-a081bee2345a</param.guid>
+    <param.screenshot>${PROJECT_ROOT}\CaTx_Menlo_splash.png</param.screenshot>
+    <param.guid />
+    <param.installpath.string>\CaTx4MenloSystems\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo>${PROJECT_ROOT}\installer_image.png</param.logo>
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\CaTx4MenloSystems\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\CaTx4MenloSystems\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\CaTx4MenloSystems\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\CaTx4MenloSystems</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>true</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text>Syntax 
+	  -? 
+	 
+ Input Arguments 
+	 -?  print help on how to use the application 
+	 input arguments</param.help.text>
     <unset>
-      <param.icon />
-      <param.icons />
       <param.description />
-      <param.products.name />
-      <param.products.id />
-      <param.products.version />
-      <param.platforms />
+      <param.guid />
+      <param.installpath.combo />
+      <param.install.notes />
+      <param.target.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
     </unset>
     <fileset.main>
       <file>${PROJECT_ROOT}\CaTx_Menlo.mlapp</file>
     </fileset.main>
+    <fileset.resources />
+    <fileset.package />
     <fileset.depfun>
       <file>${PROJECT_ROOT}\AcquisitionDialog.mlapp</file>
       <file>${PROJECT_ROOT}\CaT_logo.png</file>
       <file>${PROJECT_ROOT}\CaTx4_logo.png</file>
-      <file>${PROJECT_ROOT}\measurements.csv</file>
       <file>${PROJECT_ROOT}\MENLO-Logo.png</file>
-      <file>${PROJECT_ROOT}\progress.txt</file>
     </fileset.depfun>
-    <fileset.resources />
-    <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}" name="Package" optional="false">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\Package</file>
+      <file location="${PROJECT_ROOT}\CaTx4MenloSystems\for_testing" name="splash.png" optional="false">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4MenloSystems\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\CaTx4MenloSystems\for_testing" name="readme.txt" optional="true">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4MenloSystems\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\CaTx4MenloSystems\for_testing" name="CaTx4MenloSystems.exe" optional="false">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4MenloSystems\for_testing\CaTx4MenloSystems.exe</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>C:\Program Files\MATLAB\R2023b</root>
+      <root>C:\Program Files\MATLAB\R2023a</root>
       <toolboxes />
     </matlab>
     <platform>
