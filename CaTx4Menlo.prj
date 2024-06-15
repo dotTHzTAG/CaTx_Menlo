@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="465626765" file="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo.prj" location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo" name="CaTx4Menlo" preferred-package-location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="1700217890" file="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo.prj" location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo" name="CaTx4Menlo" preferred-package-location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>CaTx4Menlo</param.appname>
     <param.icon>${PROJECT_ROOT}\CaTx4Menlo_resources\icon.ico</param.icon>
     <param.icons>
@@ -32,7 +32,7 @@
     <param.web.mcr>true</param.web.mcr>
     <param.package.mcr>false</param.package.mcr>
     <param.no.mcr>false</param.no.mcr>
-    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.web.mcr.name>CaTx4MenloInstaller_web</param.web.mcr.name>
     <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
     <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
     <param.windows.command.prompt>true</param.windows.command.prompt>
@@ -64,7 +64,6 @@
       <param.web.mcr />
       <param.package.mcr />
       <param.no.mcr />
-      <param.web.mcr.name />
       <param.package.mcr.name />
       <param.no.mcr.name />
       <param.windows.command.prompt />
