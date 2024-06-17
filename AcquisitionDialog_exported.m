@@ -50,30 +50,24 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
     properties (Access = private)
         MainApp % Main app
         numAcq % total number of acquisitions
-        TecllNew % Acquistion table cell
         matBaseline % Baseline matrix [time stamps; amplitudes]
         matReference % Reference matrix [time stamps; amplitudes]
         processStop % Is Stop-button pressed?
+        TcellNew % Newly acquired data cell
     end
     
     methods (Access = private)
         
         function updateMain(app)
             % Call main app's public function
-            updateTableRemote(app.MainApp,app.TecllNew);
+            updateTableRemote(app.MainApp,app.TcellNew);
         end
       
-        function updateTecllNew(app,TcellNew)
-            TecllNew = app.TecllNew;
-            TecllNew = [TecllNew, TcellNew];
-            app.TecllNew = TecllNew;
-        end
-
         function addMeasurement(app)
                 numAcq = app.numAcq;
                 fig = app.AcquisitionDialogUIFigure;
                 singleOption = false;
-                curCol = size(app.TecllNew,2);
+                curCol = getSizeofTable(app.MainApp);
 
                 measMat = readWaveform(app,singleOption);
 
@@ -200,7 +194,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                     TcellNew{22,idx} = ds4; 
                 end
 
-                updateTecllNew(app,TcellNew);
+                app.TcellNew = TcellNew;
                 app.numAcq = numAcq;
         end
         
@@ -268,10 +262,10 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
     methods (Access = private)
 
         % Code that executes after component creation
-        function startupFcn(app, mainapp, Tcell)
+        function startupFcn(app, mainapp)
             % Store main app object
             app.MainApp = mainapp;
-            app.TecllNew = Tcell;
+            app.TcellMain = Tcell;
             app.numAcq = 0;
         end
 
@@ -302,7 +296,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             drawnow         
 
             % Update Main App table
-            updateTableRemote(app.MainApp,app.TecllNew);
+            updateTableRemote(app.MainApp,app.TcellNew);
         end
 
         % Button pushed function: STOPButton
@@ -333,9 +327,9 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
         % Button pushed function: ReferenceButton
         function ReferenceButtonPushed(app, event)
-            single = true;
+            singleOption = true;
             try
-                measMat = readWaveform(app,single);
+                measMat = readWaveform(app,singleOption);
                 timeAxis = table2array(measMat(1,2:end));
                 eAmp = table2array(measMat(2,2:end));
                 app.matReference = [timeAxis;eAmp];

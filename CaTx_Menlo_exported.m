@@ -279,10 +279,21 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
     end
     
     methods (Access = public)       
-        function updateTableRemote(app,TcellAcq)
-            app.Tcell = TcellAcq;
+        function updateTableRemote(app,TcellNew)
+            Tcell = app.Tcell;
+            Tcell = [Tcell,TcellNew];
+            app.Tcell = Tcell;
+
             % display("Table Update from Remote App");
             updateMeasurementTable(app);
+        end
+
+        function numCol = getSizeofTable(app)
+            try
+                numCol = size(app.Tcell,2);
+            catch
+                numCol = 0;
+            end
         end
     end
     
@@ -1350,14 +1361,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             app.AcquirefromTeraSmartButton.Enable = "off";
             app.DeployDataButton.Enable = "off";
             app.ClearMemoryButton.Enable = "off";
-
-            try
-                Tcell = app.Tcell;
-            catch
-                Tcell = [];
-            end
-
-            app.DialogApp = AcquisitionDialog(app,Tcell);
+            app.DialogApp = AcquisitionDialog(app);
         end
 
         % Close request function: CaTxUIFigure
