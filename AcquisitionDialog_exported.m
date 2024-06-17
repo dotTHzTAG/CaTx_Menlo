@@ -50,7 +50,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
     properties (Access = private)
         MainApp % Main app
         numAcq % total number of acquisitions
-        TcellAcq % Acquistion table cell
+        TecllNew % Acquistion table cell
         matBaseline % Baseline matrix [time stamps; amplitudes]
         matReference % Reference matrix [time stamps; amplitudes]
         processStop % Is Stop-button pressed?
@@ -60,21 +60,27 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         
         function updateMain(app)
             % Call main app's public function
-            updateTableRemote(app.MainApp,app.TcellAcq);
+            updateTableRemote(app.MainApp,app.TecllNew);
         end
       
-        function updateTcellAcq(app,TcellNew)
-            TcellAcq = app.TcellAcq;
-            TcellAcq = [TcellAcq, TcellNew];
-            app.TcellAcq = TcellAcq;
+        function updateTecllNew(app,TcellNew)
+            TecllNew = app.TecllNew;
+            TecllNew = [TecllNew, TcellNew];
+            app.TecllNew = TecllNew;
         end
 
-        function addMeasurement(app) % single scan#
+        function addMeasurement(app)
                 numAcq = app.numAcq;
                 fig = app.AcquisitionDialogUIFigure;
-                single = false;
-                curCol = size(app.TcellAcq,2);
-                measMat = readWaveform(app,single);
+                singleOption = false;
+                curCol = size(app.TecllNew,2);
+
+                measMat = readWaveform(app,singleOption);
+
+                if isempty(measMat)                    
+                    return;
+                end
+                
                 timeAxis = table2array(measMat(1,2:end));
                 eAmp = table2array(measMat(2:end,2:end));
                 timeStamps = table2array(measMat(2:end,1));
@@ -194,11 +200,11 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                     TcellNew{22,idx} = ds4; 
                 end
 
-                updateTcellAcq(app,TcellNew);
+                updateTecllNew(app,TcellNew);
                 app.numAcq = numAcq;
         end
         
-        function measMat = readWaveform(app,single)
+        function measMat = readWaveform(app,singleOption)
             measAverage = app.AverageNumberEditField.Value;
             measTime = app.TimesecEditField.Value;
             measCount = app.MeasurementCountEditField.Value;
@@ -207,38 +213,53 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             progressFile = 'progress.txt';
             delete(progressFile);
             measurementFile = 'measurements.csv';
-            pythonRun = true;
+            runPython = true;
+            measMat =[];
             
-            if single
+            if singleOption
                 command = sprintf('python %s --average %i', pythonScript, measAverage);
+                mode = "Single-measurement";
             else
                 if isequal(measMode,'count')
                     command = sprintf('python %s --average %i --count %i &', pythonScript, measAverage, measCount);
                 else
                     command = sprintf('python %s --average %i --time %i &', pythonScript, measAverage, measTime);
                 end
+                mode = "Multi-measurement";
             end
 
+            msg = strcat(mode," started");
+            app.StatusEditField.Value = msg;
+            drawnow
+
             system(command);
+            pause(2.0);
             
-            while pythonRun
+            while runPython
                 pause(0.5);
                 
                 try
-                    status = fileread(progressFile);
+                    msg = fileread(progressFile);
                 catch
-                    status = '';
+                    msg = "Python run error!";
+                    runPython = false;
                 end
 
-                if contains(status,'done')||app.processStop
-                    pythonRun = false;
+                if app.processStop
+                    msg = "Measurement aborted!";
+                    runPython = false;
                 end
 
-                app.StatusEditField.Value = status;
+                if contains(msg,'done')
+                    msg = "Measurement done!";
+                    runPython = false;
+                    measMat = readtable(measurementFile);
+                end
+
+                app.StatusEditField.Value = msg;
                 drawnow
             end
 
-            measMat = readtable(measurementFile);
         end
     end
     
@@ -250,7 +271,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         function startupFcn(app, mainapp, Tcell)
             % Store main app object
             app.MainApp = mainapp;
-            app.TcellAcq = Tcell;
+            app.TecllNew = Tcell;
             app.numAcq = 0;
         end
 
@@ -278,50 +299,10 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             addMeasurement(app);
             app.SystemReadyLamp.Color = "Green";
             app.SystemReadyLampLabel.Text = "Ready";
-            drawnow
-
-            % if app.MultipleAcquisitionCheckBox.Value
-            %     timeInput = app.TimesecEditField.Value;
-            %     numAcqInput = app.MeasurementCountEditField.Value;
-            % 
-            %     if timeInput == 0 && numAcqInput == 0
-            %         uialert(fig,'Invalid Multiple Acquisition Settings','Aborted');
-            %         app.SystemReadyLamp.Color = "Green";
-            %         app.SystemReadyLampLabel.Text = "Ready";
-            %         return;
-            %     end
-            % 
-            %     if timeInput ~= 0
-            %         initTime = datetime;
-            %         while ~app.processStop
-            %             addMeasurement(app);
-            %             timeLeft = timeInput - seconds(datetime - initTime);
-            %             if timeLeft <= 0
-            %                 app.processStop = true;
-            %                 timeLeft = 0;
-            %             end
-            %             app.TimeLeftsecEditField.Value = timeLeft;
-            %         end
-            % 
-            %     else % numAcqInput ~= 0
-            %         while ~app.processStop
-            %             addMeasurement(app);
-            %             if numAcqInput < scanCnt
-            %                 app.processStop = true;
-            %             end
-            %         end
-            % 
-            %     end
-            % 
-            % else
-            %     addMeasurement(app);
-            %     app.CurrentCountEditField.Value = scanCnt;
-            % end
-
-
+            drawnow         
 
             % Update Main App table
-            updateTableRemote(app.MainApp,app.TcellAcq);            
+            updateTableRemote(app.MainApp,app.TecllNew);
         end
 
         % Button pushed function: STOPButton

@@ -1,6 +1,6 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
   <configuration build-checksum="1700217890" file="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo.prj" location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo" name="CaTx4Menlo" preferred-package-location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
-    <param.appname>CaTx4Menlo</param.appname>
+    <param.appname>CaTx4MenloSystems</param.appname>
     <param.icon>${PROJECT_ROOT}\CaTx4Menlo_resources\icon.ico</param.icon>
     <param.icons>
       <file>${PROJECT_ROOT}\CaTx4Menlo_resources\icon_48.png</file>
@@ -87,7 +87,7 @@
     <build-deliverables>
       <file location="${PROJECT_ROOT}\CaTx4Menlo\for_testing" name="readme.txt" optional="true">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_testing\readme.txt</file>
       <file location="${PROJECT_ROOT}\CaTx4Menlo\for_testing" name="splash.png" optional="false">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_testing\splash.png</file>
-      <file location="${PROJECT_ROOT}\CaTx4Menlo\for_testing" name="CaTx4Menlo.exe" optional="false">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_testing\CaTx4Menlo.exe</file>
+      <file location="${PROJECT_ROOT}\CaTx4Menlo\for_testing" name="CaTx4MenloSystems.exe" optional="false">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_testing\CaTx4MenloSystems.exe</file>
     </build-deliverables>
     <workflow />
     <matlab>
