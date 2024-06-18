@@ -101,7 +101,8 @@ def getPulse(data):
                     writer = csv.writer(f_meas)
                     writer.writerow(vecData)
             
-            total_seconds = (datetime.now()-start_time).total_seconds()   
+            total_seconds = (datetime.now()-start_time).total_seconds()
+            total_seconds = round(total_seconds*1000)/1000   
 
             if  total_seconds <= measurement_time:
                 ms = round(time.time()*1000)/1000 # measurement time in milliseconds
@@ -114,7 +115,7 @@ def getPulse(data):
                     writer.writerow(vecData)
 
                 ScanControl.resetAveraging()
-                write_status(f"Progress: {i} of {measurement_time} seconds")
+                write_status(f"Progress: # {i}, {total_seconds} of {measurement_time} seconds")
                 i=i+1
             else:
                 ScanControl.setDesiredAverages(1)

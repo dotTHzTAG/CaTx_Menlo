@@ -7,6 +7,10 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         SystemReadyLampLabel            matlab.ui.control.Label
         SystemReadyLamp                 matlab.ui.control.Lamp
         MeasurementDetailsPanel         matlab.ui.container.Panel
+        RESETAVGButton                  matlab.ui.control.Button
+        csvLOADButton                   matlab.ui.control.Button
+        TemporalMeasurementFileLabel    matlab.ui.control.Label
+        csvOPENButton                   matlab.ui.control.Button
         STOPButton                      matlab.ui.control.Button
         ACQUIREButton                   matlab.ui.control.Button
         NumericValueEditField_2         matlab.ui.control.NumericEditField
@@ -63,22 +67,33 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             updateTableRemote(app.MainApp,app.TcellNew);
         end
       
-        function addMeasurement(app)
+        function addMeasurement(app,fileLoad)
                 numAcq = app.numAcq;
                 fig = app.AcquisitionDialogUIFigure;
-                singleOption = false;
+                refOption = false;
                 curCol = getSizeofTable(app.MainApp);
 
-                measMat = readWaveform(app,singleOption);
+                if fileLoad
+                    measMat = readWaveformFile(app);
+                else
+                    measMat = readWaveform(app,refOption);
+                end                
 
-                if isempty(measMat)                    
+                if isempty(measMat)    
+                    %errordlg("No Waveform Data");
                     return;
                 end
                 
-                timeAxis = table2array(measMat(1,2:end));
-                eAmp = table2array(measMat(2:end,2:end));
-                timeStamps = table2array(measMat(2:end,1));
-                clear("measMat");
+                try
+                    timeAxis = table2array(measMat(1,2:end));
+                    eAmp = table2array(measMat(2:end,2:end));
+                    timeStamps = table2array(measMat(2:end,1));
+                    clear("measMat");
+                catch
+                    errordlg("The waveform data are not compatible.");
+                    return;
+                end
+
 
                 measNum = size(eAmp,1);
                 TcellNew = cell(22,measNum);
@@ -198,7 +213,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                 app.numAcq = numAcq;
         end
         
-        function measMat = readWaveform(app,singleOption)
+        function measMat = readWaveform(app,refOption)
             measAverage = app.AverageNumberEditField.Value;
             measTime = app.TimesecEditField.Value;
             measCount = app.MeasurementCountEditField.Value;
@@ -210,7 +225,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             runPython = true;
             measMat =[];
             
-            if singleOption
+            if refOption
                 command = sprintf('python %s --average %i', pythonScript, measAverage);
                 mode = "Single-measurement";
             else
@@ -227,7 +242,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             drawnow
 
             system(command);
-            pause(2.0);
+            pause(2.5);
             
             while runPython
                 pause(0.5);
@@ -255,6 +270,24 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             end
 
         end
+        
+        function measMat = readWaveformFile(app)
+            [file, filepath] = uigetfile('*.csv',"Select Waveform CSV File");
+
+            if isequal(file,0)
+                return;
+            end
+
+            fullpath = strcat(filepath,file);
+
+            try
+               measMat = readtable(fullpath);
+            catch
+                errordlg("Waveform csv file hasn't been imported.")
+               return;
+            end
+            
+        end
     end
     
 
@@ -265,7 +298,6 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         function startupFcn(app, mainapp)
             % Store main app object
             app.MainApp = mainapp;
-            app.TcellMain = Tcell;
             app.numAcq = 0;
         end
 
@@ -287,10 +319,11 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.SystemReadyLamp.Color = [0.85,0.33,0.10];
             app.SystemReadyLampLabel.Text = "Scaning...";
             app.processStop = false;
+            fileLoad = false;
             fig = app.AcquisitionDialogUIFigure;
             drawnow
 
-            addMeasurement(app);
+            addMeasurement(app,fileLoad);
             app.SystemReadyLamp.Color = "Green";
             app.SystemReadyLampLabel.Text = "Ready";
             drawnow         
@@ -327,9 +360,9 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
         % Button pushed function: ReferenceButton
         function ReferenceButtonPushed(app, event)
-            singleOption = true;
+            refOption = true;
             try
-                measMat = readWaveform(app,singleOption);
+                measMat = readWaveform(app,refOption);
                 timeAxis = table2array(measMat(1,2:end));
                 eAmp = table2array(measMat(2,2:end));
                 app.matReference = [timeAxis;eAmp];
@@ -373,6 +406,36 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.TimesecEditField.Value = 0;
             app.MeasurementCountEditField.Value = 1;
         end
+
+        % Button pushed function: csvLOADButton
+        function csvLOADButtonPushed(app, event)
+            fileLoad = true;
+            app.StatusEditField.Value = "Loading waveform from csv file";
+            addMeasurement(app,fileLoad);
+            drawnow;
+
+            % Update Main App table
+            app.StatusEditField.Value = "Updating the main table";
+            updateTableRemote(app.MainApp,app.TcellNew);
+            drawnow;
+            app.StatusEditField.Value = "The main table is updated!";
+        end
+
+        % Button pushed function: csvOPENButton
+        function csvOPENButtonPushed(app, event)
+            csvFileName = 'measurements.csv';
+            try
+                winopen(csvFileName);
+            catch
+                errordlg('"measurements.csv" is not found in the default folder.');
+                return;
+            end            
+        end
+
+        % Button pushed function: RESETAVGButton
+        function RESETAVGButtonPushed(app, event)
+            app.AverageNumberEditField.Value = 1;
+        end
     end
 
     % Component initialization
@@ -386,7 +449,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
             % Create AcquisitionDialogUIFigure and hide until all components are created
             app.AcquisitionDialogUIFigure = uifigure('Visible', 'off');
-            app.AcquisitionDialogUIFigure.Position = [100 100 437 537];
+            app.AcquisitionDialogUIFigure.Position = [100 100 440 563];
             app.AcquisitionDialogUIFigure.Name = 'TeraSmart Control';
             app.AcquisitionDialogUIFigure.Icon = fullfile(pathToMLAPP, 'CaT_logo.png');
             app.AcquisitionDialogUIFigure.CloseRequestFcn = createCallbackFcn(app, @AcquisitionDialogUIFigureCloseRequest, true);
@@ -394,20 +457,20 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             % Create StatusButton
             app.StatusButton = uibutton(app.AcquisitionDialogUIFigure, 'push');
             app.StatusButton.FontWeight = 'bold';
-            app.StatusButton.Position = [17 500 59 27];
+            app.StatusButton.Position = [17 526 59 27];
             app.StatusButton.Text = 'Status';
 
             % Create StatusEditField
             app.StatusEditField = uieditfield(app.AcquisitionDialogUIFigure, 'text');
             app.StatusEditField.Editable = 'off';
             app.StatusEditField.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.StatusEditField.Position = [86 501 330 26];
+            app.StatusEditField.Position = [86 527 330 26];
 
             % Create MeasurementSettingsPanel
             app.MeasurementSettingsPanel = uipanel(app.AcquisitionDialogUIFigure);
             app.MeasurementSettingsPanel.Title = 'Measurement Settings';
             app.MeasurementSettingsPanel.FontWeight = 'bold';
-            app.MeasurementSettingsPanel.Position = [15 403 409 88];
+            app.MeasurementSettingsPanel.Position = [15 429 409 88];
 
             % Create MultiscanSwitchLabel
             app.MultiscanSwitchLabel = uilabel(app.MeasurementSettingsPanel);
@@ -476,7 +539,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.ReferenceAcquisitionPanel.Title = 'Reference Acquisition';
             app.ReferenceAcquisitionPanel.FontWeight = 'bold';
             app.ReferenceAcquisitionPanel.FontSize = 13;
-            app.ReferenceAcquisitionPanel.Position = [15 270 409 126];
+            app.ReferenceAcquisitionPanel.Position = [15 296 409 126];
 
             % Create SubtractBaselineCheckBox
             app.SubtractBaselineCheckBox = uicheckbox(app.ReferenceAcquisitionPanel);
@@ -539,79 +602,79 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.MeasurementDetailsPanel.Title = 'Measurement Details';
             app.MeasurementDetailsPanel.FontWeight = 'bold';
             app.MeasurementDetailsPanel.FontSize = 13;
-            app.MeasurementDetailsPanel.Position = [16 48 409 212];
+            app.MeasurementDetailsPanel.Position = [16 44 409 242];
 
             % Create SampleEditFieldLabel
             app.SampleEditFieldLabel = uilabel(app.MeasurementDetailsPanel);
             app.SampleEditFieldLabel.HorizontalAlignment = 'right';
-            app.SampleEditFieldLabel.Position = [9 155 46 22];
+            app.SampleEditFieldLabel.Position = [9 185 46 22];
             app.SampleEditFieldLabel.Text = 'Sample';
 
             % Create SampleEditField
             app.SampleEditField = uieditfield(app.MeasurementDetailsPanel, 'text');
-            app.SampleEditField.Position = [82 155 163 22];
+            app.SampleEditField.Position = [82 185 163 22];
 
             % Create ModeDropDownLabel
             app.ModeDropDownLabel = uilabel(app.MeasurementDetailsPanel);
             app.ModeDropDownLabel.HorizontalAlignment = 'right';
-            app.ModeDropDownLabel.Position = [259 155 35 22];
+            app.ModeDropDownLabel.Position = [259 185 35 22];
             app.ModeDropDownLabel.Text = 'Mode';
 
             % Create ModeDropDown
             app.ModeDropDown = uidropdown(app.MeasurementDetailsPanel);
             app.ModeDropDown.Items = {'TX', 'RX'};
-            app.ModeDropDown.Position = [306 155 83 22];
+            app.ModeDropDown.Position = [306 185 83 22];
             app.ModeDropDown.Value = 'TX';
 
             % Create DescriptionEditFieldLabel
             app.DescriptionEditFieldLabel = uilabel(app.MeasurementDetailsPanel);
             app.DescriptionEditFieldLabel.HorizontalAlignment = 'right';
-            app.DescriptionEditFieldLabel.Position = [9 123 65 22];
+            app.DescriptionEditFieldLabel.Position = [9 153 65 22];
             app.DescriptionEditFieldLabel.Text = 'Description';
 
             % Create DescriptionEditField
             app.DescriptionEditField = uieditfield(app.MeasurementDetailsPanel, 'text');
-            app.DescriptionEditField.Position = [81 123 310 22];
+            app.DescriptionEditField.Position = [81 153 310 22];
 
             % Create Metadata1EditFieldLabel
             app.Metadata1EditFieldLabel = uilabel(app.MeasurementDetailsPanel);
             app.Metadata1EditFieldLabel.HorizontalAlignment = 'right';
-            app.Metadata1EditFieldLabel.Position = [9 91 65 22];
+            app.Metadata1EditFieldLabel.Position = [9 121 65 22];
             app.Metadata1EditFieldLabel.Text = 'Metadata 1';
 
             % Create Metadata1EditField
             app.Metadata1EditField = uieditfield(app.MeasurementDetailsPanel, 'text');
-            app.Metadata1EditField.Position = [82 91 142 22];
+            app.Metadata1EditField.Position = [82 121 142 22];
 
             % Create NumericValueEditField_2Label
             app.NumericValueEditField_2Label = uilabel(app.MeasurementDetailsPanel);
             app.NumericValueEditField_2Label.HorizontalAlignment = 'right';
-            app.NumericValueEditField_2Label.Position = [227 91 83 22];
+            app.NumericValueEditField_2Label.Position = [227 121 83 22];
             app.NumericValueEditField_2Label.Text = 'Numeric Value';
 
             % Create NumericValueEditField_1
             app.NumericValueEditField_1 = uieditfield(app.MeasurementDetailsPanel, 'numeric');
-            app.NumericValueEditField_1.Position = [318 91 70 22];
+            app.NumericValueEditField_1.Position = [318 121 70 22];
 
             % Create Metadata2EditFieldLabel
             app.Metadata2EditFieldLabel = uilabel(app.MeasurementDetailsPanel);
             app.Metadata2EditFieldLabel.HorizontalAlignment = 'right';
-            app.Metadata2EditFieldLabel.Position = [9 60 65 22];
+            app.Metadata2EditFieldLabel.Position = [9 90 65 22];
             app.Metadata2EditFieldLabel.Text = 'Metadata 2';
 
             % Create Metadata2EditField
             app.Metadata2EditField = uieditfield(app.MeasurementDetailsPanel, 'text');
-            app.Metadata2EditField.Position = [82 60 142 22];
+            app.Metadata2EditField.Position = [82 90 142 22];
 
             % Create NumericValueEditFieldLabel
             app.NumericValueEditFieldLabel = uilabel(app.MeasurementDetailsPanel);
             app.NumericValueEditFieldLabel.HorizontalAlignment = 'right';
-            app.NumericValueEditFieldLabel.Position = [228 60 83 22];
+            app.NumericValueEditFieldLabel.Position = [228 90 83 22];
             app.NumericValueEditFieldLabel.Text = 'Numeric Value';
 
             % Create NumericValueEditField_2
             app.NumericValueEditField_2 = uieditfield(app.MeasurementDetailsPanel, 'numeric');
-            app.NumericValueEditField_2.Position = [318 60 70 22];
+            app.NumericValueEditField_2.Position = [318 90 70 22];
 
             % Create ACQUIREButton
             app.ACQUIREButton = uibutton(app.MeasurementDetailsPanel, 'push');
@@ -633,18 +696,49 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.STOPButton.Position = [213 12 185 33];
             app.STOPButton.Text = 'STOP';
 
+            % Create csvOPENButton
+            app.csvOPENButton = uibutton(app.MeasurementDetailsPanel, 'push');
+            app.csvOPENButton.ButtonPushedFcn = createCallbackFcn(app, @csvOPENButtonPushed, true);
+            app.csvOPENButton.FontWeight = 'bold';
+            app.csvOPENButton.FontColor = [0.149 0.149 0.149];
+            app.csvOPENButton.Position = [287 55 48 23];
+            app.csvOPENButton.Text = 'OPEN';
+
+            % Create TemporalMeasurementFileLabel
+            app.TemporalMeasurementFileLabel = uilabel(app.MeasurementDetailsPanel);
+            app.TemporalMeasurementFileLabel.FontColor = [0.149 0.149 0.149];
+            app.TemporalMeasurementFileLabel.Position = [131 56 154 22];
+            app.TemporalMeasurementFileLabel.Text = 'Temporal Measurement File';
+
+            % Create csvLOADButton
+            app.csvLOADButton = uibutton(app.MeasurementDetailsPanel, 'push');
+            app.csvLOADButton.ButtonPushedFcn = createCallbackFcn(app, @csvLOADButtonPushed, true);
+            app.csvLOADButton.FontWeight = 'bold';
+            app.csvLOADButton.FontColor = [0.149 0.149 0.149];
+            app.csvLOADButton.Position = [340 55 48 23];
+            app.csvLOADButton.Text = 'LOAD';
+
+            % Create RESETAVGButton
+            app.RESETAVGButton = uibutton(app.MeasurementDetailsPanel, 'push');
+            app.RESETAVGButton.ButtonPushedFcn = createCallbackFcn(app, @RESETAVGButtonPushed, true);
+            app.RESETAVGButton.BackgroundColor = [1 1 1];
+            app.RESETAVGButton.FontWeight = 'bold';
+            app.RESETAVGButton.FontColor = [0.851 0.3255 0.098];
+            app.RESETAVGButton.Position = [21 55 95 23];
+            app.RESETAVGButton.Text = 'RESET AVG';
+
             % Create SystemReadyLamp
             app.SystemReadyLamp = uilamp(app.AcquisitionDialogUIFigure);
-            app.SystemReadyLamp.Position = [31 15 20 20];
+            app.SystemReadyLamp.Position = [31 14 20 20];
 
             % Create SystemReadyLampLabel
             app.SystemReadyLampLabel = uilabel(app.AcquisitionDialogUIFigure);
-            app.SystemReadyLampLabel.Position = [60 13 83 22];
+            app.SystemReadyLampLabel.Position = [60 12 83 22];
             app.SystemReadyLampLabel.Text = 'System Ready';
 
             % Create Image
             app.Image = uiimage(app.AcquisitionDialogUIFigure);
-            app.Image.Position = [252 5 167 38];
+            app.Image.Position = [252 3 167 38];
             app.Image.ImageSource = fullfile(pathToMLAPP, 'MENLO-Logo.png');
 
             % Show the figure after all components are created

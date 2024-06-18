@@ -9,11 +9,11 @@
       <file>${PROJECT_ROOT}\CaTx4Menlo_resources\icon_16.png</file>
     </param.icons>
     <param.version>1.00</param.version>
-    <param.authnamewatermark>Terahertz Applications Group</param.authnamewatermark>
+    <param.authnamewatermark>J. Lee</param.authnamewatermark>
     <param.email>jl2112@cam.ac.uk</param.email>
     <param.company>University of Cambridge</param.company>
-    <param.summary>CaTx for Menlo Systems</param.summary>
-    <param.description />
+    <param.summary>The dotTHz project</param.summary>
+    <param.description>CaTx for Menlo Systems TeraSmart</param.description>
     <param.screenshot>${PROJECT_ROOT}\CaTx_Menlo_splash.png</param.screenshot>
     <param.guid />
     <param.installpath.string>\CaTx4Menlo\</param.installpath.string>
@@ -48,7 +48,6 @@
 	 -?  print help on how to use the application 
 	 input arguments</param.help.text>
     <unset>
-      <param.description />
       <param.guid />
       <param.installpath.combo />
       <param.install.notes />
