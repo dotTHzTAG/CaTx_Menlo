@@ -226,15 +226,15 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             measMat =[];
             
             if refOption
-                command = sprintf('python %s --average %i', pythonScript, measAverage);
-                mode = "Single-measurement";
+                command = sprintf('python %s --average %i &', pythonScript, measAverage);
+                mode = "Reference/Baseline measurement";
             else
                 if isequal(measMode,'count')
                     command = sprintf('python %s --average %i --count %i &', pythonScript, measAverage, measCount);
                 else
                     command = sprintf('python %s --average %i --time %i &', pythonScript, measAverage, measTime);
                 end
-                mode = "Multi-measurement";
+                mode = "Sample measurement";
             end
 
             msg = strcat(mode," started");
@@ -343,9 +343,9 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
         % Button pushed function: BaselineButton
         function BaselineButtonPushed(app, event)
-            single = true;
+            refOption = true;
             try
-                measMat = readWaveform(app,single);
+                measMat = readWaveform(app,refOption);
                 timeAxis = table2array(measMat(1,2:end));
                 eAmp = table2array(measMat(2,2:end));
                 app.matBaseline = [timeAxis;eAmp];
