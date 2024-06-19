@@ -55,17 +55,17 @@ def getPulse(data):
     ScanControl.setDesiredAverages(waveform_average)
     numAvg = ScanControl.currentAverages
     current_rate = ScanControl.rate
-    
+
     if numAvg < waveform_average or 1 == waveform_average:
         avgReset = True
     
     if numAvg == waveform_average and avgReset:
         avgReset = False
-#        print('current_rate =  ' +  str(current_rate))
         
         if count_mode:
             if i<=measurement_count:
                 if i == 1:
+                    write_status(f"Current_rate = {current_rate}")
                     timeAxis=np.asarray(np.frombuffer(base64.b64decode(ScanControl.timeAxis), dtype=np.float64)) # import time axis (x-axis)
                     timeAxis = np.insert(timeAxis,0,0)
                     vecData = timeAxis
@@ -93,6 +93,7 @@ def getPulse(data):
 
         else: # time_mode
             if i==1:
+                write_status(f"Current_rate = {current_rate}")
                 start_time = datetime.now()
                 timeAxis=np.asarray(np.frombuffer(base64.b64decode(ScanControl.timeAxis), dtype=np.float64)) # import time axis (x-axis)
                 timeAxis = np.insert(timeAxis,0,0)

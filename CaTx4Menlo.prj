@@ -76,7 +76,13 @@
       <file>${PROJECT_ROOT}\CaTx_Menlo.mlapp</file>
     </fileset.main>
     <fileset.resources />
-    <fileset.package />
+    <fileset.package>
+      <file>${PROJECT_ROOT}\__pycache__</file>
+      <file>${PROJECT_ROOT}\Engines</file>
+      <file>${PROJECT_ROOT}\getPulse_ml.py</file>
+      <file>${PROJECT_ROOT}\pywebchannel</file>
+      <file>${PROJECT_ROOT}\scancontrolclient.py</file>
+    </fileset.package>
     <fileset.depfun>
       <file>${PROJECT_ROOT}\AcquisitionDialog.mlapp</file>
       <file>${PROJECT_ROOT}\CaT_logo.png</file>
