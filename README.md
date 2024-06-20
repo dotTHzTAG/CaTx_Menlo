@@ -13,12 +13,14 @@ Please download [CaTx4MenloInstaller_web.exe](CaTx4MenloInstaller_web.exe) and r
  -	Click **Next**, then click **Begin Install**
 
  *Add Shortcut to Desktop:*
- -	Right-click and drag the CaTSPer.exe file at C:\Program Files\CaTx4Menlo\application\ to Windows Desktop
+ -	Right-click and drag the CaTx4Menlo.exe file at C:\Program Files\CaTx4Menlo\application\ to Windows Desktop
  -	Select **Create shortcut to here.**
  -	Right-click the shortcut and select **properties.**
  -	At the Shortcut tab, click **Advanced…**
  -	Check **Run as administrator.**
  -	Click **OK** and **OK**
+
+ *Please run CaTx4Menlo as administrator!!!*
 
  <img src="/Images/dotTHzProject_logo.png" height ="150">
 
@@ -35,6 +37,6 @@ Please follow the instructions below.
  - **AcquisitionDialog.mlapp** : Acquisition dialog MATLAB App-designer file
  - **.\images\CaT_logo.png** : logo image
  - **.\images\dotTHz_logo.png** : logo image
-3. Double click **CaTSper.mlapp** to launch the software.
+3. Double click **CaTx4Menlo.mlapp** to launch the software.
 
 For detailed descriptions for CaTx4Menlo and step-by-step tutorial, please visit [dotTHz documentation](https://github.com/dotTHzTAG/Documentation).
