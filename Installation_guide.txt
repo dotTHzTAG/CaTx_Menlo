@@ -1,5 +1,5 @@
 Python Installation (for PharmPoro and CaTx4Menlo)
-A: Setting Python environment
+ A: Setting Python environment
   1. Install Python 3.9.13 (May 17 2022) - compatible with MATLAB version > R2021a
   2. Customize installation
   3. Install launcher for all users check!
@@ -8,14 +8,14 @@ A: Setting Python environment
   6. Customize install location: Browse -> C:\Python\Python39
   7. Install -> complete
 
-B. Package installation
+ B. Package installation
  (Windows command prompt) <- Windows search "cmd" (enter)
  - pip install PyQt5 (enter)
  - pip install websockets (enter)
  - pip install numpy (enter)
  - pip install astropy (enter)
 
-C: Setting Windows path 
+ C: Setting Windows path 
  - Windows taskbar -> Search with 'environment variables' -> Edit the system environment variables
  -> Advanced tab -> Environment Variables button -> New
  -> Name: PYTHONPATH, Value: -> Browse directory: C:\Python\Python39\Lib\Site-packages (site-package directory)
@@ -27,15 +27,15 @@ Spyder IDE installation
  - (Windows command prompt) > pip install spyder-kernels==2.5.* (enter)
 
 MATLAB Application Installation:
-  1. Run the *.exe files
-  2. MATLAB Installer will be launched. Click [Next]
-  3. At ‘Select destination folder’ step, leave ‘Add shortcut to desktop’ UNCHECKED!
-  4. Click [Next], Click [Begin Install]
+  1. Run the CaTx4Menlo.exe file
+  2. MATLAB Installer will launch. Click [Next]
+  3. At the ‘Select destination folder’ step, leave ‘Add shortcut to desktop’ UNCHECKED.
+  4. Click [Next], and then Click [Begin Install]
 
 Add Shortcut to Desktop:
-  1. Right-click and drag *exe file at C:\Program Files\CaTSPer(or PharmPoro, CaTx4Menlo) \application\ to Windows Desktop
+  1. Right-click and drag *exe file at C:\Program Files\CaTx4Menlo\application\ to Windows Desktop
   2. Select ‘Create shortcut to here’
-  3 Right-click the shortcut and select ‘properties’
-  4. At Shortcut tab, click [Advanced…]
-  5. Check ‘Run as administrator]
+  3. Right-click the shortcut and select ‘properties’
+  4. At the Shortcut tab, click [Advanced…]
+  5. Check [Run as administrator]
   6. [OK], [OK]
