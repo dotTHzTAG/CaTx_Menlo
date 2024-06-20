@@ -1,42 +1,41 @@
-A: Python environment settting
- 1. Install Python 3.9.13 (May 17 2022) - compatible with MATLAB version > R2021b
- - Install
- - Customize installation
- - Install laucher for all users check!
- - Add Python 3.9 to PATH
- - Options all check!
- - Customize install location: Browse -> C:\Python\Python39
- - Install -> complete
+Python Installation (for PharmPoro and CaTx4Menlo)
+A: Setting Python environment
+  1. Install Python 3.9.13 (May 17 2022) - compatible with MATLAB version > R2021a
+  2. Customize installation
+  3. Install launcher for all users check!
+  4. Add Python 3.9 to PATH
+  5. Check all options
+  6. Customize install location: Browse -> C:\Python\Python39
+  7. Install -> complete
 
-2. Spyder IDE installation
- - Lauch Spyder -> menu -> Tools -> Preferences -> Python Interpreter -> Default to C:\Python\Python39\Python.exe -> Apply -> OK
- - (Windows command prompt) > pip install spyder-kernels==2.5.* (enter)
-
-3. Package installation
+B. Package installation
  (Windows command prompt) <- Windows search "cmd" (enter)
  - pip install PyQt5 (enter)
  - pip install websockets (enter)
  - pip install numpy (enter)
  - pip install astropy (enter)
 
-B: Windows setting 
- 4. Windows path setting
+C: Setting Windows path 
  - Windows taskbar -> Search with 'environment variables' -> Edit the system environment variables
  -> Advanced tab -> Environment Variables button -> New
  -> Name: PYTHONPATH, Value: -> Browse directory: C:\Python\Python39\Lib\Site-packages (site-package directory)
  -> OK -> OK
 
-C: CaTxMenlo Installation
- 5. Copy all python scripts to \CaTxMenlo directory
- - _pycache_ folder
- - pywebchannel
- - get_Pulse_ml.py
- - scancontrolclient.py
 
- 6. Install CaTxMenlo and copy Engine files 
- - Engines directory
+Spyder IDE installation
+ - Lauch Spyder -> menu -> Tools -> Preferences -> Python Interpreter -> Default to C:\Python\Python39\Python.exe -> Apply -> OK
+ - (Windows command prompt) > pip install spyder-kernels==2.5.* (enter)
 
- 7. Lauch CaTxMenlo.exe
- 
- 
- 
+MATLAB Application Installation:
+  1. Run the *.exe files
+  2. MATLAB Installer will be launched. Click [Next]
+  3. At ‘Select destination folder’ step, leave ‘Add shortcut to desktop’ UNCHECKED!
+  4. Click [Next], Click [Begin Install]
+
+Add Shortcut to Desktop:
+  1. Right-click and drag *exe file at C:\Program Files\CaTSPer(or PharmPoro, CaTx4Menlo) \application\ to Windows Desktop
+  2. Select ‘Create shortcut to here’
+  3 Right-click the shortcut and select ‘properties’
+  4. At Shortcut tab, click [Advanced…]
+  5. Check ‘Run as administrator]
+  6. [OK], [OK]
