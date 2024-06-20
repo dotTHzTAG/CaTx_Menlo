@@ -451,7 +451,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.AcquisitionDialogUIFigure = uifigure('Visible', 'off');
             app.AcquisitionDialogUIFigure.Position = [100 100 440 563];
             app.AcquisitionDialogUIFigure.Name = 'TeraSmart Control';
-            app.AcquisitionDialogUIFigure.Icon = fullfile(pathToMLAPP, 'CaT_logo.png');
+            app.AcquisitionDialogUIFigure.Icon = fullfile(pathToMLAPP, 'Images', 'CaT_logo.png');
             app.AcquisitionDialogUIFigure.CloseRequestFcn = createCallbackFcn(app, @AcquisitionDialogUIFigureCloseRequest, true);
 
             % Create StatusButton
@@ -739,7 +739,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             % Create Image
             app.Image = uiimage(app.AcquisitionDialogUIFigure);
             app.Image.Position = [252 3 167 38];
-            app.Image.ImageSource = fullfile(pathToMLAPP, 'MENLO-Logo.png');
+            app.Image.ImageSource = fullfile(pathToMLAPP, 'Images', 'MENLO-Logo.png');
 
             % Show the figure after all components are created
             app.AcquisitionDialogUIFigure.Visible = 'on';

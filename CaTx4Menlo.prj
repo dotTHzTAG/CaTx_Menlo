@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="1700217890" file="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo.prj" location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo" name="CaTx4Menlo" preferred-package-location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="1014361446" file="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo.prj" location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo" name="CaTx4Menlo" preferred-package-location="C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\App\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>CaTx4Menlo</param.appname>
     <param.icon>${PROJECT_ROOT}\CaTx4Menlo_resources\icon.ico</param.icon>
     <param.icons>
@@ -13,12 +13,12 @@
     <param.email>jl2112@cam.ac.uk</param.email>
     <param.company>University of Cambridge</param.company>
     <param.summary>The dotTHz project</param.summary>
-    <param.description>CaTx for Menlo Systems TeraSmart</param.description>
-    <param.screenshot>${PROJECT_ROOT}\CaTx_Menlo_splash.png</param.screenshot>
+    <param.description />
+    <param.screenshot>${PROJECT_ROOT}\Images\CaTx_Menlo_splash.png</param.screenshot>
     <param.guid />
     <param.installpath.string>\CaTx4Menlo\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
-    <param.logo>${PROJECT_ROOT}\installer_image.png</param.logo>
+    <param.logo>${PROJECT_ROOT}\Images\installer_image.png</param.logo>
     <param.install.notes />
     <param.target.install.notes />
     <param.intermediate>${PROJECT_ROOT}\CaTx4Menlo\for_testing</param.intermediate>
@@ -33,7 +33,7 @@
     <param.package.mcr>false</param.package.mcr>
     <param.no.mcr>false</param.no.mcr>
     <param.web.mcr.name>CaTx4MenloInstaller_web</param.web.mcr.name>
-    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.package.mcr.name>CaTx4MenloInstaller_mcr</param.package.mcr.name>
     <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
     <param.windows.command.prompt>true</param.windows.command.prompt>
     <param.create.log>false</param.create.log>
@@ -48,6 +48,7 @@
 	 -?  print help on how to use the application 
 	 input arguments</param.help.text>
     <unset>
+      <param.description />
       <param.guid />
       <param.installpath.combo />
       <param.install.notes />
@@ -63,7 +64,6 @@
       <param.web.mcr />
       <param.package.mcr />
       <param.no.mcr />
-      <param.package.mcr.name />
       <param.no.mcr.name />
       <param.windows.command.prompt />
       <param.create.log />
@@ -80,14 +80,15 @@
       <file>${PROJECT_ROOT}\__pycache__</file>
       <file>${PROJECT_ROOT}\Engines</file>
       <file>${PROJECT_ROOT}\getPulse_ml.py</file>
+      <file>${PROJECT_ROOT}\Profiles</file>
       <file>${PROJECT_ROOT}\pywebchannel</file>
       <file>${PROJECT_ROOT}\scancontrolclient.py</file>
     </fileset.package>
     <fileset.depfun>
       <file>${PROJECT_ROOT}\AcquisitionDialog.mlapp</file>
-      <file>${PROJECT_ROOT}\CaT_logo.png</file>
-      <file>${PROJECT_ROOT}\CaTx4_logo.png</file>
-      <file>${PROJECT_ROOT}\MENLO-Logo.png</file>
+      <file>${PROJECT_ROOT}\Images\CaT_logo.png</file>
+      <file>${PROJECT_ROOT}\Images\CaTx4_logo.png</file>
+      <file>${PROJECT_ROOT}\Images\MENLO-Logo.png</file>
     </fileset.depfun>
     <build-deliverables>
       <file location="${PROJECT_ROOT}\CaTx4Menlo\for_testing" name="readme.txt" optional="true">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_testing\readme.txt</file>

@@ -1384,7 +1384,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             app.CaTxUIFigure = uifigure('Visible', 'off');
             app.CaTxUIFigure.Position = [100 100 1118 868];
             app.CaTxUIFigure.Name = 'CaTx';
-            app.CaTxUIFigure.Icon = fullfile(pathToMLAPP, 'CaT_logo.png');
+            app.CaTxUIFigure.Icon = fullfile(pathToMLAPP, 'Images', 'CaT_logo.png');
             app.CaTxUIFigure.CloseRequestFcn = createCallbackFcn(app, @CaTxUIFigureCloseRequest, true);
 
             % Create ImportMeasurementButton
@@ -1875,7 +1875,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             % Create Image2
             app.Image2 = uiimage(app.CaTxUIFigure);
             app.Image2.Position = [27 781 151 35];
-            app.Image2.ImageSource = fullfile(pathToMLAPP, 'MENLO-Logo.png');
+            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Images', 'MENLO-Logo.png');
 
             % Create AcquirefromTeraSmartButton
             app.AcquirefromTeraSmartButton = uibutton(app.CaTxUIFigure, 'push');
@@ -1890,7 +1890,7 @@ classdef CaTx_Menlo_exported < matlab.apps.AppBase
             % Create Image3
             app.Image3 = uiimage(app.CaTxUIFigure);
             app.Image3.Position = [27 814 118 48];
-            app.Image3.ImageSource = fullfile(pathToMLAPP, 'CaTx4_logo.png');
+            app.Image3.ImageSource = fullfile(pathToMLAPP, 'Images', 'CaTx4_logo.png');
 
             % Show the figure after all components are created
             app.CaTxUIFigure.Visible = 'on';
