@@ -85,7 +85,8 @@ def getPulse(data):
                 ScanControl.resetAveraging()
                 write_status(f"Progress: {i} of {measurement_count} counts")
                 i=i+1
-            else:
+            
+            if i>measurement_count:
                 ScanControl.setDesiredAverages(1)
                 ScanControl.stop()
                 client.loop.stop()                         
@@ -118,6 +119,7 @@ def getPulse(data):
                 ScanControl.resetAveraging()
                 write_status(f"Progress: # {i}, {total_seconds} of {measurement_time} seconds")
                 i=i+1
+                
             else:
                 ScanControl.setDesiredAverages(1)
                 ScanControl.stop()

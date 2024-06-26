@@ -9,11 +9,11 @@
       <file>${PROJECT_ROOT}\CaTx4Menlo_resources\icon_16.png</file>
     </param.icons>
     <param.version>1.00</param.version>
-    <param.authnamewatermark>J. Lee</param.authnamewatermark>
+    <param.authnamewatermark>Terahertz Applications Group</param.authnamewatermark>
     <param.email>jl2112@cam.ac.uk</param.email>
     <param.company>University of Cambridge</param.company>
     <param.summary>The dotTHz project</param.summary>
-    <param.description />
+    <param.description>Prof J. Axel Zeitler's Group Project</param.description>
     <param.screenshot>${PROJECT_ROOT}\Images\CaTx_Menlo_splash.png</param.screenshot>
     <param.guid />
     <param.installpath.string>\CaTx4Menlo\</param.installpath.string>
@@ -46,9 +46,10 @@
 	 
  Input Arguments 
 	 -?  print help on how to use the application 
-	 input arguments</param.help.text>
+	 input arguments 
+ Description 
+ 	 Prof J. Axel Zeitler's Group Project</param.help.text>
     <unset>
-      <param.description />
       <param.guid />
       <param.installpath.combo />
       <param.install.notes />

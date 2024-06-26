@@ -226,7 +226,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             measMat =[];
             
             if refOption
-                command = sprintf('python %s --average %i &', pythonScript, measAverage);
+                command = sprintf('python %s --average %i --count %i &', pythonScript, measAverage, 1);
                 mode = "Reference/Baseline measurement";
             else
                 if isequal(measMode,'count')
