@@ -4,15 +4,15 @@
 
 **Installation guide (standalone version)**
 
-Please download [CaTx4MenloInstaller_web.exe](CaTx4MenloInstaller_web.exe) and run it on your local computer as decribed below. 
+> Please download [CaTx4MenloInstaller_web.exe](CaTx4MenloInstaller_web.exe) and run it on your local computer as decribed below. 
 
-*MATLAB Application Installation:*
+## MATLAB Application Installation:
  -	Run the CaTx4MenloInstaller_web.exe file (an internect connection is necessary for installation.)
  -	The MATLAB Installer will launch. Click **Next**.
  -	At the ‘Select destination folder’ step, leave ‘Add shortcut to desktop’ **UNCHECKED**.
  -	Click **Next**, then click **Begin Install**
 
- *Add Shortcut to Desktop:*
+## Add Shortcut to Desktop:
  -	Right-click and drag the CaTx4Menlo.exe file at C:\Program Files\CaTx4Menlo\application\ to Windows Desktop
  -	Select **Create shortcut to here.**
  -	Right-click the shortcut and select **properties.**
@@ -20,11 +20,34 @@ Please download [CaTx4MenloInstaller_web.exe](CaTx4MenloInstaller_web.exe) and r
  -	Check **Run as administrator.**
  -	Click **OK** and **OK**
 
- *Please run CaTx4Menlo as administrator!!!*
+>**Please run CaTx4Menlo as administrator!!!**
+
+## Python Installation (for PharmPoro and CaTx4Menlo):
+  A: Setting Python environment
+  1.	Install Python 3.9.13 (May 17 2022) - compatible with MATLAB version > R2021a
+  2.	Customize installation
+  3.	Install launcher for all users check!
+  4.	Add Python 3.9 to PATH
+  5.	Check all options
+  6.	Customize install location: Browse -> C:\Python\Python39
+  7.	Install -> complete
+
+  B. Package installation
+  (Windows command prompt) <- Windows search "cmd" (enter)
+  - pip install PyQt5 (enter)
+  - pip install websockets (enter)
+  - pip install numpy (enter)
+  - pip install astropy (enter)
+
+  C: Setting Windows path 
+  - Windows taskbar -> Search with 'environment variables' -> Edit the system environment variables
+  -> Advanced tab -> Environment Variables button -> New
+  -> Name: PYTHONPATH, Value: -> Browse directory: C:\Python\Python39\Lib\Site-packages (site-package directory)
+  -> OK -> OK
 
  <img src="/Images/dotTHzProject_logo.png" height ="150">
 
-**For the source code modification**
+# **For the source code modification**
 
 CaTx4Menlo.mlapp is a MATLAB App-Designer (version r2023a) file and runs on MATLAB environment. If MATLAB is not installed in your PC, please visit https://uk.mathworks.com/products/matlab.html and install the latest version before you run CaTSper. 
 
