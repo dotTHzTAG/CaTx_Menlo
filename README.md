@@ -1,6 +1,6 @@
 # CaTx4Menlo
 
-   <img src="/Images/CaTx_Menlo_splash.png" height ="300">
+   <img src="/Images/CaTx4Menlo_splash.png" height ="300">
 
 **Installation guide (standalone version)**
 
@@ -12,7 +12,7 @@
  -	At the ‘Select destination folder’ step, leave ‘Add shortcut to desktop’ **UNCHECKED**.
  -	Click **Next**, then click **Begin Install**
 
-## Add Shortcut to Desktop:
+## Add Shortcut to Desktop (for Windows):
  -	Right-click and drag the CaTx4Menlo.exe file at C:\Program Files\CaTx4Menlo\application\ to Windows Desktop
  -	Select **Create shortcut to here.**
  -	Right-click the shortcut and select **properties.**
