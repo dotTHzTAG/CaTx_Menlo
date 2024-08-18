@@ -829,8 +829,9 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         
         function loadMetaTable(app)
             group.t1 = categorical({'-','Sample','Reference'});
-            group.t2 = categorical({'-','Thickness','Weight','Temperature','Volume','Concentration','Refractive Index','Molar Mass'});
+            group.t2 = categorical({'-','Thickness','Diameter','Weight','Temperature','Volume','Concentration','Refractive Index','Molar Mass'});
             group.Thickness = categorical({'m','cm','mm','μm','nm'});
+            group.Diameter = categorical({'cm','mm','μm'});
             group.Weight = categorical({'g','mg','μg','ng'});
             group.Temperature = categorical({'K','°C','°F'});
             group.Volume = categorical({'ml','μl','nl'});
@@ -2150,6 +2151,8 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                         metaTableData(indices(1),4) = table({group.Concentration(1)});
                     case 'Molar Mass'
                         metaTableData(indices(1),4) = table({group.MolarMass(1)});
+                    case 'Diameter'
+                        metaTableData(indices(1),4) = table({group.Diameter(2)});
                     otherwise
                         metaTableData(indices(1),4) = {'-'};
                 end

@@ -19,7 +19,10 @@
     <param.installpath.string>\CaTx4Menlo\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
     <param.logo>${PROJECT_ROOT}\Images\installer_image.png</param.logo>
-    <param.install.notes />
+    <param.install.notes>For details
+&gt; https://doi.org/10.1007/s10762-023-00947-w
+GitHub Documentation
+&gt; https://github.com/dotTHzTAG/Documentation</param.install.notes>
     <param.target.install.notes />
     <param.intermediate>${PROJECT_ROOT}\CaTx4Menlo\for_testing</param.intermediate>
     <param.files.only>${PROJECT_ROOT}\CaTx4Menlo\for_redistribution_files_only</param.files.only>
@@ -51,7 +54,6 @@
       <param.description />
       <param.guid />
       <param.installpath.combo />
-      <param.install.notes />
       <param.target.install.notes />
       <param.intermediate />
       <param.files.only />
