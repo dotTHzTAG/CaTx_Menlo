@@ -592,6 +592,15 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         function ResetIntervalTimeButtonPushed(app, event)
             app.IntervalEditField.Value = 0;
         end
+
+        % Button pushed function: StatusButton
+        function StatusButtonPushed(app, event)
+            try
+                readStatus(app)
+            catch
+                return;
+            end
+        end
     end
 
     % Component initialization
@@ -612,6 +621,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
             % Create StatusButton
             app.StatusButton = uibutton(app.AcquisitionDialogUIFigure, 'push');
+            app.StatusButton.ButtonPushedFcn = createCallbackFcn(app, @StatusButtonPushed, true);
             app.StatusButton.FontWeight = 'bold';
             app.StatusButton.Position = [17 724 59 27];
             app.StatusButton.Text = 'Status';
