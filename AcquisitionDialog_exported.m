@@ -340,6 +340,31 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.mdDescription = mdDescription;
         end
         
+        
+        function readStatus(app)
+            pythonScript = 'getStatus.py';
+            statusFile = 'status.txt';
+            command = sprintf('python %s', pythonScript);
+            system(command);
+            pause(0.5);            
+            try
+                msg = fileread(statusFile);
+            catch
+                msg = [];
+            end
+
+            if isempty(msg) || contains(msg,{'Error','Uninitialized'})
+                app.SystemReadyLamp.Color = [0.85,0.33,0.10];
+                app.SystemReadyLampLabel.Text = "Not Ready";
+                msg = "ScanControl is not connetect.";
+            else
+                app.SystemReadyLamp.Color = "Green";
+                app.SystemReadyLampLabel.Text = "Ready";
+            end
+            app.StatusEditField.Value = msg;
+            delete(statusFile);
+            drawnow
+        end
     end
     
 
@@ -369,7 +394,8 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             catch ME            
                 app.thzVer = '';
             end
-            loadMetaTable(app);            
+            loadMetaTable(app);
+            readStatus(app);
         end
 
         % Close request function: AcquisitionDialogUIFigure
