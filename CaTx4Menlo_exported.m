@@ -288,6 +288,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             baseTof = [];
 
             Tcell = cell(22,PRJ_count); % cell structure table
+            fileLocation = string(fileLocation);
 
             % Read Reference Signal
             if readReference && openRefereceFile
@@ -305,12 +306,12 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                 baseTHz = baseVec(:,baseTHzIdx)';
             end
 
-            dsDescription = 'ds1: Sample';
+            dsDescription = 'Sample';
             if readReference
-                dsDescription = strcat(dsDescription,', ds2: Reference');
+                dsDescription = strcat(dsDescription,',Reference');
             end
             if readBaseline && ~subtractBaseline
-                dsDescription = strcat(dsDescription,', ds3: Reference');
+                dsDescription = strcat(dsDescription,',Baseline');
             end
 
             % Read Sample Signal
@@ -788,11 +789,10 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
 
             dsDescription = "Sample";
             if app.LoadReferenceCheckBox.Value
-                %dsDescription = strcat(dsDescription,', ds',num2str(app.dsEditField_Reference.Value),': Reference');
-                dsDescription = strcat(dsDescription,", ","Reference");
+                dsDescription = strcat(dsDescription,",Reference");
             end
             if app.LoadBaselineCheckBox.Value && ~app.SubtractCheckBox.Value
-                dsDescription = strcat(dsDescription,", ","Baseline");
+                dsDescription = strcat(dsDescription,",Baseline");
             end
             app.DSDescriptionEditField.Value = dsDescription;
         end
@@ -860,7 +860,6 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             noUnits = {'Refractive Index','-'};
 
             for idx = 1:mdNum
-               %rowContent = strcat('md',num2str(idx),':'); 
                rowContent = '';
                if ~isequal(string(metaTableData{idx,2}),'-')
                    rowContent = strcat(rowContent,string(metaTableData{idx,2}),'_');
@@ -1092,14 +1091,12 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
 
             app.SourceDatasetDropDown.Items = srcDDItems;
 
-            Tcell = app.Tcell(indices(1),indices(2));
-            dataType = [2 1 1 2 2, 2 2 2 1 1, 1 1 1 1 1, 1 2 1 2 2, 2 2]; % 1 for modifiables, 2 for non-modifiables
-
-            if dataType(indices(1)) < 2
-                app.UITable_Measurement.ColumnEditable = true;
-            else
+            uneditableRows = [1,17,19,20,21,22];
+            if ismember(indices(1),uneditableRows)
                 app.UITable_Measurement.ColumnEditable = false;
-            end            
+            else
+                app.UITable_Measurement.ColumnEditable = true;
+            end
         end
 
         % Cell edit callback: UITable_Measurement
