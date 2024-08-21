@@ -186,8 +186,8 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                     TcellNew{1,idx} = curCol+idx;
                     TcellNew{2,idx} = sampleName;
                     TcellNew{3,idx} = description;
-                    TcellNew{4,idx} = app.instrumentProfile;
-                    TcellNew{5,idx} = app.userProfile;
+                    TcellNew{4,idx} = '';
+                    TcellNew{5,idx} = '';
                     TcellNew{6,idx} = datetimeValue; % measurement start time
                     TcellNew{7,idx} = mode; % THz-TDS/THz-Imaging/Transmission/Reflection
                     TcellNew{8,idx} = []; % coordinates
@@ -219,7 +219,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             measCount = app.MeasurementCountEditField.Value;
             measMode = app.MultiscanSwitch.Value;
             intervalTime = app.IntervalEditField.Value;
-            pythonScript = 'getPulse_ml.py';
+            pythonScript = 'getPulse.py';
             progressFile = 'progress.txt';
             delete(progressFile);
             pause(0.5);

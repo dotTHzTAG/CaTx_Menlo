@@ -23,11 +23,11 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         CopyButton                      matlab.ui.control.Button
         SourceDatasetDropDown           matlab.ui.control.DropDown
         SourceLabel                     matlab.ui.control.Label
-        FILEDLISTTOEditField            matlab.ui.control.NumericEditField
+        TargetColumnToEditField         matlab.ui.control.NumericEditField
         toLabel                         matlab.ui.control.Label
-        ofColumnsEditField              matlab.ui.control.NumericEditField
+        TargetColumnFromEditField       matlab.ui.control.NumericEditField
         ofColumnsEditFieldLabel         matlab.ui.control.Label
-        ofColumnEditField               matlab.ui.control.NumericEditField
+        SourceColumnEditField           matlab.ui.control.NumericEditField
         ofColumnEditFieldLabel          matlab.ui.control.Label
         ColumnControlPanel              matlab.ui.container.Panel
         SortRowDropDown                 matlab.ui.control.DropDown
@@ -161,9 +161,9 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         recipeTable % imported recipe table
         recipeData % imported the whole recipe data from json file
         group % Unit structure corresponding to the metadata categories
-        recipeFile = 'DeploymentRecipes.json';
-        profileFile = 'Profiles.json';
-        configFile = 'Configuration.json';
+        recipeFile
+        profileFile
+        configFile
         %#exclude DeploymentRecipes.json
         %#exclude Profiles.json
         %#exclude Configuration.json
@@ -172,6 +172,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
     methods (Access = private)
         function loadProfiles(app)
             fig = app.CaTx4MenloUIFigure;
+
             try
                 profileData = jsondecode(fileread(app.profileFile));
             catch ME            
@@ -197,6 +198,9 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             Tcell = app.Tcell;
             measNum = size(Tcell,2);
             app.totalMeasNum = measNum;
+            app.Ins_MeasurementFieldToEditField.Value = measNum;
+            app.User_MeasurementFieldToEditField.Value = measNum;
+            app.TargetColumnToEditField.Value = measNum;
 
             sFont = uistyle("FontColor","black");
             addStyle(app.UITable_Measurement,sFont);
@@ -215,8 +219,8 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             fig = app.CaTx4MenloUIFigure;
             Indices = app.cellIndices;
             Tcell = app.Tcell;
-            colFrom = app.ofColumnsEditField.Value;
-            colTo = app.FILEDLISTTOEditField.Value;
+            colFrom = app.TargetColumnFromEditField.Value;
+            colTo = app.TargetColumnToEditField.Value;
             totalMeasNum = app.totalMeasNum;
 
             try
@@ -231,7 +235,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             if app.manualMode
                 return;
             else
-                srcCol = app.ofColumnEditField.Value;
+                srcCol = app.SourceColumnEditField.Value;
             end
             
             if isequal(Opt,"Delete")
@@ -405,10 +409,9 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             end
 
             app.DEBUGMsgLabel.Text = "Complete Loading";
-            app.totalMeasNum = PRJIdx;
+
             app.Tcell = Tcell;
             updateMeasurementTable(app);
-            app.FILEDLISTTOEditField.Value = app.totalMeasNum;
             app.TabGroup.SelectedTab = app.TabGroup.Children(1);
         end
         
@@ -579,10 +582,9 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             end
 
             app.DEBUGMsgLabel.Text = "Complete Loading";
-            app.totalMeasNum = size(Tcell,2);
             app.Tcell = Tcell;
+
             updateMeasurementTable(app);
-            app.FILEDLISTTOEditField.Value = app.totalMeasNum;
             app.TabGroup.SelectedTab = app.TabGroup.Children(1);
         end
         
@@ -688,7 +690,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                 end
                 totalMeasNum = totalMeasNum + idx;
             end
-            app.totalMeasNum = totalMeasNum;
+
             app.Tcell = Tcell;
             updateMeasurementTable(app);
         end
@@ -817,7 +819,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                 jsonText = jsonencode(profileData, 'PrettyPrint', true);
                 fid = fopen(app.profileFile, 'w');
                 if fid == -1
-                    error('Cannot open file for writing: %s', app.recipeFile);
+                    error('Cannot open file for writing: %s', app.profileFile);
                 end
                 fwrite(fid, jsonText, 'char');
                 fclose(fid);
@@ -881,6 +883,15 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
     methods (Access = public)
         function updateTableRemote(app,TcellNew)
             Tcell = app.Tcell;
+
+            try
+                TcellNew(4,:) = {app.instrument_profile};
+                TcellNew(5,:) = {app.user_profile};
+            catch
+                TcellNew(4,:) = '';
+                TcellNew(5,:) = '';
+            end
+
             Tcell = [Tcell,TcellNew];
             app.Tcell = Tcell;
 
@@ -905,6 +916,19 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             fig = app.CaTx4MenloUIFigure;
             app.PRJ_count = 0;
             app.filename = [];
+
+            app.recipeFile = 'DeploymentRecipes.json';
+            app.profileFile = 'Profiles.json';
+            app.configFile = 'Configuration.json';
+
+            if isdeployed % This if-loop specifies the json file folder for macOS.  
+                appRoot = ctfroot;
+                appRoot = extractBefore(appRoot,'CaTx.app');
+                app.configFile = [appRoot,app.configFile];
+                app.recipeFile = [appRoot,app.recipeFile];
+                app.profileFile = [appRoot,app.profileFile];
+            end
+
             try
                 configData = jsondecode(fileread(app.configFile));
             catch ME            
@@ -1037,9 +1061,6 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                     deployData_readmatrix(app,PRJ_count,fullpathname,recipeNum);
             end
 
-            app.Ins_MeasurementFieldToEditField.Value = app.totalMeasNum;
-            app.User_MeasurementFieldToEditField.Value = app.totalMeasNum;
-            app.FILEDLISTTOEditField.Value = app.totalMeasNum;
             app.TabGroup.SelectedTab = app.TabGroup.Children(1);
         end
 
@@ -1073,7 +1094,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                 return;
             end
 
-            % app.ofColumnEditField.Value = indices(2);
+            % app.SourceColumnEditField.Value = indices(2);
             srcDDItems = {}; %app.SourceDatasetDropDown.Items
 
             if ~isempty(app.Tcell{19,indices(2)})
@@ -1481,12 +1502,8 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
 
             % update the table
             app.Tcell = Tcell;
-            updateMeasurementTable(app);
 
-            app.totalMeasNum = size(Tcell,2);
-            app.Ins_MeasurementFieldToEditField.Value = app.totalMeasNum;
-            app.User_MeasurementFieldToEditField.Value = app.totalMeasNum;
-            app.FILEDLISTTOEditField.Value = app.totalMeasNum;
+            updateMeasurementTable(app);
         end
 
         % Button pushed function: PlotDatasetsButton
@@ -2448,12 +2465,12 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.ofColumnEditFieldLabel.Position = [153 74 60 22];
             app.ofColumnEditFieldLabel.Text = 'of Column';
 
-            % Create ofColumnEditField
-            app.ofColumnEditField = uieditfield(app.DatasetControlPanel, 'numeric');
-            app.ofColumnEditField.Limits = [1 Inf];
-            app.ofColumnEditField.ValueDisplayFormat = '%.0f';
-            app.ofColumnEditField.Position = [228 74 55 22];
-            app.ofColumnEditField.Value = 1;
+            % Create SourceColumnEditField
+            app.SourceColumnEditField = uieditfield(app.DatasetControlPanel, 'numeric');
+            app.SourceColumnEditField.Limits = [1 Inf];
+            app.SourceColumnEditField.ValueDisplayFormat = '%.0f';
+            app.SourceColumnEditField.Position = [228 74 55 22];
+            app.SourceColumnEditField.Value = 1;
 
             % Create ofColumnsEditFieldLabel
             app.ofColumnsEditFieldLabel = uilabel(app.DatasetControlPanel);
@@ -2461,12 +2478,12 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.ofColumnsEditFieldLabel.Position = [150 42 73 22];
             app.ofColumnsEditFieldLabel.Text = 'of Columns (';
 
-            % Create ofColumnsEditField
-            app.ofColumnsEditField = uieditfield(app.DatasetControlPanel, 'numeric');
-            app.ofColumnsEditField.Limits = [1 Inf];
-            app.ofColumnsEditField.ValueDisplayFormat = '%.0f';
-            app.ofColumnsEditField.Position = [229 43 55 22];
-            app.ofColumnsEditField.Value = 1;
+            % Create TargetColumnFromEditField
+            app.TargetColumnFromEditField = uieditfield(app.DatasetControlPanel, 'numeric');
+            app.TargetColumnFromEditField.Limits = [1 Inf];
+            app.TargetColumnFromEditField.ValueDisplayFormat = '%.0f';
+            app.TargetColumnFromEditField.Position = [229 43 55 22];
+            app.TargetColumnFromEditField.Value = 1;
 
             % Create toLabel
             app.toLabel = uilabel(app.DatasetControlPanel);
@@ -2474,12 +2491,12 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.toLabel.Position = [286 42 12 22];
             app.toLabel.Text = '-';
 
-            % Create FILEDLISTTOEditField
-            app.FILEDLISTTOEditField = uieditfield(app.DatasetControlPanel, 'numeric');
-            app.FILEDLISTTOEditField.Limits = [1 Inf];
-            app.FILEDLISTTOEditField.ValueDisplayFormat = '%.0f';
-            app.FILEDLISTTOEditField.Position = [306 42 55 22];
-            app.FILEDLISTTOEditField.Value = 1;
+            % Create TargetColumnToEditField
+            app.TargetColumnToEditField = uieditfield(app.DatasetControlPanel, 'numeric');
+            app.TargetColumnToEditField.Limits = [1 Inf];
+            app.TargetColumnToEditField.ValueDisplayFormat = '%.0f';
+            app.TargetColumnToEditField.Position = [306 42 55 22];
+            app.TargetColumnToEditField.Value = 1;
 
             % Create SourceLabel
             app.SourceLabel = uilabel(app.DatasetControlPanel);
