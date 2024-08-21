@@ -4,15 +4,17 @@
 
 **Installation guide (standalone version)**
 
-> Please download [CaTx4MenloInstaller_web.exe](CaTx4MenloInstaller_web.exe) and run it on your local computer as decribed below. 
+> Please download the installer and run it on your local computer as decribed below. 
 
-## MATLAB Application Installation:
- -	Run the CaTx4MenloInstaller_web.exe file (an internect connection is necessary for installation.)
+## For Windows
+
+*MATLAB Application Installation:*
+ -	Download and run [CaTx4MenloInstaller_Windows_web.exe](CaTx4MenloInstaller_Windows_web.exe) (an internect connection is necessary for installation.)
  -	The MATLAB Installer will launch. Click **Next**.
  -	At the ‘Select destination folder’ step, leave ‘Add shortcut to desktop’ **UNCHECKED**.
  -	Click **Next**, then click **Begin Install**
 
-## Add Shortcut to Desktop (for Windows):
+*Add Shortcut to Desktop (for Windows):*
  -	Right-click and drag the CaTx4Menlo.exe file at C:\Program Files\CaTx4Menlo\application\ to Windows Desktop
  -	Select **Create shortcut to here.**
  -	Right-click the shortcut and select **properties.**
@@ -22,7 +24,23 @@
 
 >**Please run CaTx4Menlo as administrator!!!**
 
-## Python Installation (for PharmPoro and CaTx4Menlo):
+## For MacOS
+
+*MATLAB Application Installation:*
+ -	Download and run [CaTx4MenloInstaller_Mac_web.app](CaTx4MenloInstaller_Mac_web.app) (an internect connection is necessary for installation.)
+ -	The MATLAB Installer will launch. Click **Next**.
+ -	Click **Next**, then click **Begin Install**
+
+ *Unlock 'json' files after installation*
+ -	Move to the application folder at /Applications/CaTx/application
+ -	Unlock *'Configuration.json'*,*'DeploymentRecipes.json'*,*'Profiles.json'* files.
+ -	To unlock a json file:
+>   1) Double-click the file and try to change its content. When a warning message pops up, Select 'Unlock'.
+>   2) Right-click the file and change its file permissions from *Read* to *Read & Write*.
+
+
+
+## Python Installation (for Windows):
   A: Setting Python environment
   1.	Install Python 3.9.13 (May 17 2022) - compatible with MATLAB version > R2021a
   2.	Customize installation
