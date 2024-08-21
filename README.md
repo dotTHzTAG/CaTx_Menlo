@@ -6,15 +6,15 @@
 
 > Please download the installer and run it on your local computer as decribed below. 
 
-**For Windows**
+## For Windows
 
-## MATLAB Application Installation:
+*MATLAB Application Installation:*
  -	Download and run [CaTx4MenloInstaller_Windows_web.exe](CaTx4MenloInstaller_Windows_web.exe) (an internect connection is necessary for installation.)
  -	The MATLAB Installer will launch. Click **Next**.
  -	At the ‘Select destination folder’ step, leave ‘Add shortcut to desktop’ **UNCHECKED**.
  -	Click **Next**, then click **Begin Install**
 
-## Add Shortcut to Desktop (for Windows):
+*Add Shortcut to Desktop (for Windows):*
  -	Right-click and drag the CaTx4Menlo.exe file at C:\Program Files\CaTx4Menlo\application\ to Windows Desktop
  -	Select **Create shortcut to here.**
  -	Right-click the shortcut and select **properties.**
@@ -24,7 +24,7 @@
 
 >**Please run CaTx4Menlo as administrator!!!**
 
-**For MacOS**
+## For MacOS
 
 *MATLAB Application Installation:*
  -	Download and run [CaTx4MenloInstaller_Mac_web.app](CaTx4MenloInstaller_Mac_web.app) (an internect connection is necessary for installation.)
