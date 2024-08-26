@@ -90,7 +90,7 @@ ${DYLD_LIBRARY_PATH}:MR/R2023b/runtime/maca64:MR/R2023b/sys/os/maca64:MR/R2023b/
       <file>${PROJECT_ROOT}/Configuration.json</file>
       <file>${PROJECT_ROOT}/DeploymentRecipes.json</file>
       <file>${PROJECT_ROOT}/Profiles.json</file>
-      <file>${PROJECT_ROOT}/getPulse_ml.py</file>
+      <file>${PROJECT_ROOT}/getPulse.py</file>
       <file>${PROJECT_ROOT}/getStatus.py</file>
       <file>${PROJECT_ROOT}/pywebchannel</file>
       <file>${PROJECT_ROOT}/scancontrolclient.py</file>
@@ -121,7 +121,7 @@ ${DYLD_LIBRARY_PATH}:MR/R2023b/runtime/maca64:MR/R2023b/sys/os/maca64:MR/R2023b/
       <vista>false</vista>
       <linux>false</linux>
       <solaris>false</solaris>
-      <osver>14.5</osver>
+      <osver>14.6.1</osver>
       <os32>true</os32>
       <os64>false</os64>
       <arch>maci64</arch>
