@@ -244,28 +244,33 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             drawnow
 
             system(command);
-            pause(2.5);
+            pause(2.5 + (measAverage*0.1));
             
             while runPython
                 pause(0.5);
+
                 try
                     msg = fileread(progressFile);
                 catch
                     msg = "Python run error!";
                     runPython = false;
                 end
+
                 if app.processStop
                     msg = "Measurement aborted!";
                     runPython = false;
                 end
+
                 if contains(msg,'done')
                     msg = "Measurement done!";
                     runPython = false;
                     measMat = readtable(measurementFile);
                 end
+                
                 app.StatusEditField.Value = msg;
                 drawnow
             end
+
         end
         
         function measMat = readWaveformFile(app)

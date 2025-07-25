@@ -852,6 +852,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         end
         
         function updateMDDescription(app)
+            app.manualMode =0;
             metaTableData = app.UITable_Metadata.Data;
             mdNum = app.MetadatanumberSpinner.Value;
             mdDescription = '';

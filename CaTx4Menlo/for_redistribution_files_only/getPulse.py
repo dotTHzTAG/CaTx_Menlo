@@ -89,14 +89,15 @@ def getPulse(data):
                     writer = csv.writer(f_meas)
                     writer.writerow(vecData)
                     
-                # Wait until the next measurement time
-                while datetime.now() < next_measurement_time:
-                    time.sleep(0.01)  # Sleep in small increments to reduce CPU usage
-                    
                 ScanControl.resetAveraging()
                 write_status(f"Progress: {i} of {measurement_count} counts")
-                i = i + 1
+
+                # Wait until the next measurement time
+                while datetime.now() < next_measurement_time:
+                    time.sleep(0.05)  # Sleep in small increments to reduce CPU usage
+
                 next_measurement_time = datetime.now() + timedelta(seconds=interval_time)
+                i = i + 1
 
             if i > measurement_count:
                 ScanControl.setDesiredAverages(1)
@@ -116,10 +117,10 @@ def getPulse(data):
                     writer = csv.writer(f_meas)
                     writer.writerow(vecData)
 
-            total_seconds = (datetime.now() - start_time).total_seconds()
-            total_seconds = round(total_seconds * 1000) / 1000
+            passed_seconds = (datetime.now() - start_time).total_seconds()
+            passed_seconds = round(passed_seconds * 1000) / 1000
 
-            if total_seconds <= measurement_duration:
+            if passed_seconds <= measurement_duration:
                 ms = round(time.time() * 1000) / 1000  # measurement time in milliseconds
                 eAmp = data['amplitude'][0]  # import E-field data
                 eAmp = np.insert(eAmp, 0, ms)
@@ -128,15 +129,16 @@ def getPulse(data):
                 with open(measurementFile, 'a', newline='') as f_meas:
                     writer = csv.writer(f_meas)
                     writer.writerow(vecData)
-                    
+                        
+                ScanControl.resetAveraging()
+                write_status(f"Progress: # {i}, {passed_seconds} of {measurement_duration} seconds")
+
                 # Wait until the next measurement time
                 while datetime.now() < next_measurement_time:
-                    time.sleep(0.01)  # Sleep in small increments to reduce CPU usage
-                    
-                ScanControl.resetAveraging()
-                write_status(f"Progress: # {i}, {total_seconds} of {measurement_duration} seconds")
-                i = i + 1
+                    time.sleep(0.05)  # Sleep in small increments to reduce CPU usage
+                
                 next_measurement_time = datetime.now() + timedelta(seconds=interval_time) 
+                i = i + 1
 
             else:
                 ScanControl.setDesiredAverages(1)

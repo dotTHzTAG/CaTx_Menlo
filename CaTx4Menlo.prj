@@ -8,7 +8,7 @@
       <file>${PROJECT_ROOT}\CaTx4Menlo_resources\icon_24.png</file>
       <file>${PROJECT_ROOT}\CaTx4Menlo_resources\icon_16.png</file>
     </param.icons>
-    <param.version>1.3</param.version>
+    <param.version>1.4</param.version>
     <param.authnamewatermark>MenloSystems and TAG</param.authnamewatermark>
     <param.email>jl2112@cam.ac.uk</param.email>
     <param.company>MenloSystems and University of Cambridge</param.company>
@@ -102,7 +102,14 @@ GitHub Documentation
     <workflow />
     <matlab>
       <root>C:\Program Files\MATLAB\R2023a</root>
-      <toolboxes />
+      <toolboxes>
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
     </matlab>
     <platform>
       <unix>false</unix>
