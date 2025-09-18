@@ -4,8 +4,8 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
     properties (Access = public)
         AcquisitionDialogUIFigure       matlab.ui.Figure
         Image                           matlab.ui.control.Image
-        SystemReadyLampLabel            matlab.ui.control.Label
-        SystemReadyLamp                 matlab.ui.control.Lamp
+        SystemStatusLampLabel           matlab.ui.control.Label
+        SystemStatusLamp                matlab.ui.control.Lamp
         MeasurementDetailsPanel         matlab.ui.container.Panel
         ResetIntervalTimeButton         matlab.ui.control.Button
         MetaDescriptionEditField        matlab.ui.control.EditField
@@ -58,16 +58,9 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         matReference % Reference matrix [time stamps; amplitudes]
         processStop % Is Stop-button pressed?
         TcellNew % Newly acquired data cell
-        instrumentProfile
-        userProfile
-        thzVer
         group
         mdVal
         mdDescription
-        %#exclude Profiles.json
-        %#exclude Configuration.json
-        %#exclude measurements.csv
-        %#exclude progress.txt
     end
     
     methods (Access = private)
@@ -359,12 +352,12 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             end
 
             if isempty(msg) || contains(msg,{'Error','Uninitialized'})
-                app.SystemReadyLamp.Color = [0.85,0.33,0.10];
-                app.SystemReadyLampLabel.Text = "Not Ready";
+                app.SystemStatusLamp.Color = [0.85,0.33,0.10];
+                app.SystemStatusLampLabel.Text = "Not Ready";
                 msg = "ScanControl is not connetect.";
             else
-                app.SystemReadyLamp.Color = "Green";
-                app.SystemReadyLampLabel.Text = "Ready";
+                app.SystemStatusLamp.Color = "Green";
+                app.SystemStatusLampLabel.Text = "Ready";
             end
             app.StatusEditField.Value = msg;
             delete(statusFile);
@@ -381,26 +374,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             % Store main app object
             app.MainApp = mainapp;
             app.numAcq = 0;
-            
-            try 
-                profileFile = 'Profiles.json';
-                profileData = jsondecode(fileread(profileFile));
-                app.instrumentProfile = profileData.defaultInstrument;
-                app.userProfile = profileData.defaultUser;
-            catch ME            
-                app.instrumentProfile = '';
-                app.userProfile = '';
-            end
-
-            try
-                configFile = 'Configuration.json';
-                configData = jsondecode(fileread(configFile));
-                app.thzVer = configData.thzVer;
-            catch ME            
-                app.thzVer = '';
-            end
             loadMetaTable(app);
-            readStatus(app);
         end
 
         % Close request function: AcquisitionDialogUIFigure
@@ -418,16 +392,16 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
 
         % Button pushed function: ACQUIREButton
         function ACQUIREButtonPushed(app, event)
-            app.SystemReadyLamp.Color = [0.85,0.33,0.10];
-            app.SystemReadyLampLabel.Text = "Scaning...";
+            app.SystemStatusLamp.Color = [0.85,0.33,0.10];
+            app.SystemStatusLampLabel.Text = "Scaning...";
             app.processStop = false;
             fileLoad = false;
             app.ACQUIREButton.Enable = "off";
             drawnow
 
             addMeasurement(app,fileLoad);
-            app.SystemReadyLamp.Color = "Green";
-            app.SystemReadyLampLabel.Text = "Ready";
+            app.SystemStatusLamp.Color = "Green";
+            app.SystemStatusLampLabel.Text = "Ready";
             drawnow         
 
             % Update Main App table
@@ -636,6 +610,7 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.StatusEditField.Editable = 'off';
             app.StatusEditField.BackgroundColor = [0.9412 0.9412 0.9412];
             app.StatusEditField.Position = [86 725 389 26];
+            app.StatusEditField.Value = 'Press [Status] to read the system status';
 
             % Create MeasurementSettingsPanel
             app.MeasurementSettingsPanel = uipanel(app.AcquisitionDialogUIFigure);
@@ -925,14 +900,15 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
             app.ResetIntervalTimeButton.Position = [161 79 141 23];
             app.ResetIntervalTimeButton.Text = 'Reset Interval Time';
 
-            % Create SystemReadyLamp
-            app.SystemReadyLamp = uilamp(app.AcquisitionDialogUIFigure);
-            app.SystemReadyLamp.Position = [29 13 20 20];
+            % Create SystemStatusLamp
+            app.SystemStatusLamp = uilamp(app.AcquisitionDialogUIFigure);
+            app.SystemStatusLamp.Position = [29 13 20 20];
+            app.SystemStatusLamp.Color = [1 1 0.0667];
 
-            % Create SystemReadyLampLabel
-            app.SystemReadyLampLabel = uilabel(app.AcquisitionDialogUIFigure);
-            app.SystemReadyLampLabel.Position = [58 11 83 22];
-            app.SystemReadyLampLabel.Text = 'System Ready';
+            % Create SystemStatusLampLabel
+            app.SystemStatusLampLabel = uilabel(app.AcquisitionDialogUIFigure);
+            app.SystemStatusLampLabel.Position = [58 11 82 22];
+            app.SystemStatusLampLabel.Text = 'System Status';
 
             % Create Image
             app.Image = uiimage(app.AcquisitionDialogUIFigure);

@@ -14,37 +14,6 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         NumberPrefixSwitch              matlab.ui.control.Switch
         PrefixnumberstothedatasetnameLabel  matlab.ui.control.Label
         TabGroup                        matlab.ui.container.TabGroup
-        MeasurementsandMetadataTab      matlab.ui.container.Tab
-        DatasetControlPanel             matlab.ui.container.Panel
-        Label                           matlab.ui.control.Label
-        DeleteSourceButton              matlab.ui.control.Button
-        TargetDatasetDropDown           matlab.ui.control.DropDown
-        TargetLabel                     matlab.ui.control.Label
-        CopyButton                      matlab.ui.control.Button
-        SourceDatasetDropDown           matlab.ui.control.DropDown
-        SourceLabel                     matlab.ui.control.Label
-        TargetColumnToEditField         matlab.ui.control.NumericEditField
-        toLabel                         matlab.ui.control.Label
-        TargetColumnFromEditField       matlab.ui.control.NumericEditField
-        ofColumnsEditFieldLabel         matlab.ui.control.Label
-        SourceColumnEditField           matlab.ui.control.NumericEditField
-        ofColumnEditFieldLabel          matlab.ui.control.Label
-        ColumnControlPanel              matlab.ui.container.Panel
-        SortRowDropDown                 matlab.ui.control.DropDown
-        SortRowDropDownLabel            matlab.ui.control.Label
-        SortDirectionSwitch             matlab.ui.control.Switch
-        SortButton                      matlab.ui.control.Button
-        PlotDatasetsButton              matlab.ui.control.Button
-        MoveButton_2                    matlab.ui.control.Button
-        MoveButton                      matlab.ui.control.Button
-        RemoveButton                    matlab.ui.control.Button
-        MetadataPanel                   matlab.ui.container.Panel
-        FileLabel                       matlab.ui.control.Label
-        LOADMETAXLS_EditField           matlab.ui.control.EditField
-        ImportMetadataFromXLSFileButton  matlab.ui.control.Button
-        GenerateMetadataXLSFileButton   matlab.ui.control.Button
-        UITable_Header                  matlab.ui.control.Table
-        UITable_Measurement             matlab.ui.control.Table
         InstrumentsandUsersTab          matlab.ui.container.Tab
         CurrentUserEditField            matlab.ui.control.EditField
         CurrentUserEditFieldLabel       matlab.ui.control.Label
@@ -77,6 +46,37 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         InstrumentsLabel                matlab.ui.control.Label
         UITable_Users                   matlab.ui.control.Table
         UITable_Instruments             matlab.ui.control.Table
+        MeasurementsandMetadataTab      matlab.ui.container.Tab
+        DatasetControlPanel             matlab.ui.container.Panel
+        Label                           matlab.ui.control.Label
+        DeleteSourceButton              matlab.ui.control.Button
+        TargetDatasetDropDown           matlab.ui.control.DropDown
+        TargetLabel                     matlab.ui.control.Label
+        CopyButton                      matlab.ui.control.Button
+        SourceDatasetDropDown           matlab.ui.control.DropDown
+        SourceLabel                     matlab.ui.control.Label
+        TargetColumnToEditField         matlab.ui.control.NumericEditField
+        toLabel                         matlab.ui.control.Label
+        TargetColumnFromEditField       matlab.ui.control.NumericEditField
+        ofColumnsEditFieldLabel         matlab.ui.control.Label
+        SourceColumnEditField           matlab.ui.control.NumericEditField
+        ofColumnEditFieldLabel          matlab.ui.control.Label
+        ColumnControlPanel              matlab.ui.container.Panel
+        SortRowDropDown                 matlab.ui.control.DropDown
+        SortRowDropDownLabel            matlab.ui.control.Label
+        SortDirectionSwitch             matlab.ui.control.Switch
+        SortButton                      matlab.ui.control.Button
+        PlotDatasetsButton              matlab.ui.control.Button
+        MoveButton_2                    matlab.ui.control.Button
+        MoveButton                      matlab.ui.control.Button
+        RemoveButton                    matlab.ui.control.Button
+        MetadataPanel                   matlab.ui.container.Panel
+        FileLabel                       matlab.ui.control.Label
+        LOADMETAXLS_EditField           matlab.ui.control.EditField
+        ImportMetadataFromXLSFileButton  matlab.ui.control.Button
+        GenerateMetadataXLSFileButton   matlab.ui.control.Button
+        UITable_Header                  matlab.ui.control.Table
+        UITable_Measurement             matlab.ui.control.Table
         DeploymentRecipeTab             matlab.ui.container.Tab
         DownButton                      matlab.ui.control.Button
         UpButton                        matlab.ui.control.Button
@@ -412,7 +412,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
 
             app.Tcell = Tcell;
             updateMeasurementTable(app);
-            app.TabGroup.SelectedTab = app.TabGroup.Children(1);
+            app.TabGroup.SelectedTab = app.TabGroup.Children(2);
         end
         
         
@@ -585,7 +585,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.Tcell = Tcell;
 
             updateMeasurementTable(app);
-            app.TabGroup.SelectedTab = app.TabGroup.Children(1);
+            app.TabGroup.SelectedTab = app.TabGroup.Children(2);
         end
         
         function loadDeploymentRecipes(app)
@@ -1062,7 +1062,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                     deployData_readmatrix(app,PRJ_count,fullpathname,recipeNum);
             end
 
-            app.TabGroup.SelectedTab = app.TabGroup.Children(1);
+            app.TabGroup.SelectedTab = app.TabGroup.Children(2);
         end
 
         % Button pushed function: ClearMemoryButton
@@ -2351,199 +2351,6 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.TabGroup = uitabgroup(app.CaTx4MenloUIFigure);
             app.TabGroup.Position = [24 50 1075 723];
 
-            % Create MeasurementsandMetadataTab
-            app.MeasurementsandMetadataTab = uitab(app.TabGroup);
-            app.MeasurementsandMetadataTab.Title = 'Measurements and Metadata';
-
-            % Create UITable_Measurement
-            app.UITable_Measurement = uitable(app.MeasurementsandMetadataTab);
-            app.UITable_Measurement.ColumnName = '';
-            app.UITable_Measurement.ColumnRearrangeable = 'on';
-            app.UITable_Measurement.RowName = {};
-            app.UITable_Measurement.ColumnEditable = true;
-            app.UITable_Measurement.CellEditCallback = createCallbackFcn(app, @UITable_MeasurementCellEdit, true);
-            app.UITable_Measurement.CellSelectionCallback = createCallbackFcn(app, @UITable_MeasurementCellSelection, true);
-            app.UITable_Measurement.Multiselect = 'off';
-            app.UITable_Measurement.Position = [193 150 857 532];
-
-            % Create UITable_Header
-            app.UITable_Header = uitable(app.MeasurementsandMetadataTab);
-            app.UITable_Header.ColumnName = '';
-            app.UITable_Header.RowName = {};
-            app.UITable_Header.FontWeight = 'bold';
-            app.UITable_Header.Position = [23 150 171 532];
-
-            % Create MetadataPanel
-            app.MetadataPanel = uipanel(app.MeasurementsandMetadataTab);
-            app.MetadataPanel.Title = 'Metadata';
-            app.MetadataPanel.Position = [34 13 226 127];
-
-            % Create GenerateMetadataXLSFileButton
-            app.GenerateMetadataXLSFileButton = uibutton(app.MetadataPanel, 'push');
-            app.GenerateMetadataXLSFileButton.ButtonPushedFcn = createCallbackFcn(app, @GenerateMetadataXLSFileButtonPushed, true);
-            app.GenerateMetadataXLSFileButton.Position = [14 73 200 25];
-            app.GenerateMetadataXLSFileButton.Text = 'Generate Metadata XLS File';
-
-            % Create ImportMetadataFromXLSFileButton
-            app.ImportMetadataFromXLSFileButton = uibutton(app.MetadataPanel, 'push');
-            app.ImportMetadataFromXLSFileButton.ButtonPushedFcn = createCallbackFcn(app, @ImportMetadataFromXLSFileButtonPushed, true);
-            app.ImportMetadataFromXLSFileButton.Position = [14 41 200 25];
-            app.ImportMetadataFromXLSFileButton.Text = 'Import Metadata From XLS File';
-
-            % Create LOADMETAXLS_EditField
-            app.LOADMETAXLS_EditField = uieditfield(app.MetadataPanel, 'text');
-            app.LOADMETAXLS_EditField.Editable = 'off';
-            app.LOADMETAXLS_EditField.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.LOADMETAXLS_EditField.Position = [48 11 166 22];
-
-            % Create FileLabel
-            app.FileLabel = uilabel(app.MetadataPanel);
-            app.FileLabel.Position = [20 11 28 22];
-            app.FileLabel.Text = 'File:';
-
-            % Create ColumnControlPanel
-            app.ColumnControlPanel = uipanel(app.MeasurementsandMetadataTab);
-            app.ColumnControlPanel.Title = 'Column Control';
-            app.ColumnControlPanel.Position = [271 13 336 127];
-
-            % Create RemoveButton
-            app.RemoveButton = uibutton(app.ColumnControlPanel, 'push');
-            app.RemoveButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveButtonPushed, true);
-            app.RemoveButton.Position = [11 10 150 25];
-            app.RemoveButton.Text = 'Remove';
-
-            % Create MoveButton
-            app.MoveButton = uibutton(app.ColumnControlPanel, 'push');
-            app.MoveButton.ButtonPushedFcn = createCallbackFcn(app, @MoveButtonPushed, true);
-            app.MoveButton.Position = [10 73 74 25];
-            app.MoveButton.Text = 'Move <<';
-
-            % Create MoveButton_2
-            app.MoveButton_2 = uibutton(app.ColumnControlPanel, 'push');
-            app.MoveButton_2.ButtonPushedFcn = createCallbackFcn(app, @MoveButton_2Pushed, true);
-            app.MoveButton_2.Position = [87 73 74 25];
-            app.MoveButton_2.Text = '>>Move';
-
-            % Create PlotDatasetsButton
-            app.PlotDatasetsButton = uibutton(app.ColumnControlPanel, 'push');
-            app.PlotDatasetsButton.ButtonPushedFcn = createCallbackFcn(app, @PlotDatasetsButtonPushed, true);
-            app.PlotDatasetsButton.Position = [11 42 150 25];
-            app.PlotDatasetsButton.Text = 'Plot Datasets';
-
-            % Create SortButton
-            app.SortButton = uibutton(app.ColumnControlPanel, 'push');
-            app.SortButton.ButtonPushedFcn = createCallbackFcn(app, @SortButtonPushed, true);
-            app.SortButton.IconAlignment = 'center';
-            app.SortButton.Position = [175 10 153 25];
-            app.SortButton.Text = 'Sort';
-
-            % Create SortDirectionSwitch
-            app.SortDirectionSwitch = uiswitch(app.ColumnControlPanel, 'slider');
-            app.SortDirectionSwitch.Items = {'Ascend', 'Descend'};
-            app.SortDirectionSwitch.Position = [227 44 45 20];
-            app.SortDirectionSwitch.Value = 'Ascend';
-
-            % Create SortRowDropDownLabel
-            app.SortRowDropDownLabel = uilabel(app.ColumnControlPanel);
-            app.SortRowDropDownLabel.HorizontalAlignment = 'right';
-            app.SortRowDropDownLabel.Position = [176 71 54 22];
-            app.SortRowDropDownLabel.Text = 'Sort Row';
-
-            % Create SortRowDropDown
-            app.SortRowDropDown = uidropdown(app.ColumnControlPanel);
-            app.SortRowDropDown.Items = {'2', '3', '4', '5', '6', '7', '8', '10', '11', '12', '13', '14', '15', '16'};
-            app.SortRowDropDown.Position = [241 71 84 22];
-            app.SortRowDropDown.Value = '2';
-
-            % Create DatasetControlPanel
-            app.DatasetControlPanel = uipanel(app.MeasurementsandMetadataTab);
-            app.DatasetControlPanel.Title = 'Dataset Control';
-            app.DatasetControlPanel.Position = [617 13 427 127];
-
-            % Create ofColumnEditFieldLabel
-            app.ofColumnEditFieldLabel = uilabel(app.DatasetControlPanel);
-            app.ofColumnEditFieldLabel.HorizontalAlignment = 'right';
-            app.ofColumnEditFieldLabel.Position = [153 74 60 22];
-            app.ofColumnEditFieldLabel.Text = 'of Column';
-
-            % Create SourceColumnEditField
-            app.SourceColumnEditField = uieditfield(app.DatasetControlPanel, 'numeric');
-            app.SourceColumnEditField.Limits = [1 Inf];
-            app.SourceColumnEditField.ValueDisplayFormat = '%.0f';
-            app.SourceColumnEditField.Position = [228 74 55 22];
-            app.SourceColumnEditField.Value = 1;
-
-            % Create ofColumnsEditFieldLabel
-            app.ofColumnsEditFieldLabel = uilabel(app.DatasetControlPanel);
-            app.ofColumnsEditFieldLabel.HorizontalAlignment = 'right';
-            app.ofColumnsEditFieldLabel.Position = [150 42 73 22];
-            app.ofColumnsEditFieldLabel.Text = 'of Columns (';
-
-            % Create TargetColumnFromEditField
-            app.TargetColumnFromEditField = uieditfield(app.DatasetControlPanel, 'numeric');
-            app.TargetColumnFromEditField.Limits = [1 Inf];
-            app.TargetColumnFromEditField.ValueDisplayFormat = '%.0f';
-            app.TargetColumnFromEditField.Position = [229 43 55 22];
-            app.TargetColumnFromEditField.Value = 1;
-
-            % Create toLabel
-            app.toLabel = uilabel(app.DatasetControlPanel);
-            app.toLabel.HorizontalAlignment = 'right';
-            app.toLabel.Position = [286 42 12 22];
-            app.toLabel.Text = '-';
-
-            % Create TargetColumnToEditField
-            app.TargetColumnToEditField = uieditfield(app.DatasetControlPanel, 'numeric');
-            app.TargetColumnToEditField.Limits = [1 Inf];
-            app.TargetColumnToEditField.ValueDisplayFormat = '%.0f';
-            app.TargetColumnToEditField.Position = [306 42 55 22];
-            app.TargetColumnToEditField.Value = 1;
-
-            % Create SourceLabel
-            app.SourceLabel = uilabel(app.DatasetControlPanel);
-            app.SourceLabel.HorizontalAlignment = 'right';
-            app.SourceLabel.Position = [16 74 46 22];
-            app.SourceLabel.Text = 'Source ';
-
-            % Create SourceDatasetDropDown
-            app.SourceDatasetDropDown = uidropdown(app.DatasetControlPanel);
-            app.SourceDatasetDropDown.Items = {'ds1', 'ds2', 'ds3', 'ds4'};
-            app.SourceDatasetDropDown.ItemsData = {'19', '20', '21', '22'};
-            app.SourceDatasetDropDown.Position = [69 74 81 22];
-            app.SourceDatasetDropDown.Value = '19';
-
-            % Create CopyButton
-            app.CopyButton = uibutton(app.DatasetControlPanel, 'push');
-            app.CopyButton.ButtonPushedFcn = createCallbackFcn(app, @CopyButtonPushed, true);
-            app.CopyButton.IconAlignment = 'right';
-            app.CopyButton.Position = [227 10 181 24];
-            app.CopyButton.Text = 'Copy';
-
-            % Create TargetLabel
-            app.TargetLabel = uilabel(app.DatasetControlPanel);
-            app.TargetLabel.HorizontalAlignment = 'right';
-            app.TargetLabel.Position = [15 43 42 22];
-            app.TargetLabel.Text = 'Target ';
-
-            % Create TargetDatasetDropDown
-            app.TargetDatasetDropDown = uidropdown(app.DatasetControlPanel);
-            app.TargetDatasetDropDown.Items = {'ds1', 'ds2', 'ds3', 'ds4'};
-            app.TargetDatasetDropDown.ItemsData = {'19', '20', '21', '22'};
-            app.TargetDatasetDropDown.Position = [69 43 81 22];
-            app.TargetDatasetDropDown.Value = '20';
-
-            % Create DeleteSourceButton
-            app.DeleteSourceButton = uibutton(app.DatasetControlPanel, 'push');
-            app.DeleteSourceButton.ButtonPushedFcn = createCallbackFcn(app, @DeleteSourceButtonPushed, true);
-            app.DeleteSourceButton.IconAlignment = 'right';
-            app.DeleteSourceButton.Position = [295 73 113 24];
-            app.DeleteSourceButton.Text = 'Delete Source';
-
-            % Create Label
-            app.Label = uilabel(app.DatasetControlPanel);
-            app.Label.Position = [365 43 25 22];
-            app.Label.Text = ')';
-
             % Create InstrumentsandUsersTab
             app.InstrumentsandUsersTab = uitab(app.TabGroup);
             app.InstrumentsandUsersTab.Title = 'Instruments and Users';
@@ -2756,6 +2563,199 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.CurrentUserEditField.Editable = 'off';
             app.CurrentUserEditField.BackgroundColor = [0.9412 0.9412 0.9412];
             app.CurrentUserEditField.Position = [420 80 477 22];
+
+            % Create MeasurementsandMetadataTab
+            app.MeasurementsandMetadataTab = uitab(app.TabGroup);
+            app.MeasurementsandMetadataTab.Title = 'Measurements and Metadata';
+
+            % Create UITable_Measurement
+            app.UITable_Measurement = uitable(app.MeasurementsandMetadataTab);
+            app.UITable_Measurement.ColumnName = '';
+            app.UITable_Measurement.ColumnRearrangeable = 'on';
+            app.UITable_Measurement.RowName = {};
+            app.UITable_Measurement.ColumnEditable = true;
+            app.UITable_Measurement.CellEditCallback = createCallbackFcn(app, @UITable_MeasurementCellEdit, true);
+            app.UITable_Measurement.CellSelectionCallback = createCallbackFcn(app, @UITable_MeasurementCellSelection, true);
+            app.UITable_Measurement.Multiselect = 'off';
+            app.UITable_Measurement.Position = [193 150 857 532];
+
+            % Create UITable_Header
+            app.UITable_Header = uitable(app.MeasurementsandMetadataTab);
+            app.UITable_Header.ColumnName = '';
+            app.UITable_Header.RowName = {};
+            app.UITable_Header.FontWeight = 'bold';
+            app.UITable_Header.Position = [23 150 171 532];
+
+            % Create MetadataPanel
+            app.MetadataPanel = uipanel(app.MeasurementsandMetadataTab);
+            app.MetadataPanel.Title = 'Metadata';
+            app.MetadataPanel.Position = [34 13 226 127];
+
+            % Create GenerateMetadataXLSFileButton
+            app.GenerateMetadataXLSFileButton = uibutton(app.MetadataPanel, 'push');
+            app.GenerateMetadataXLSFileButton.ButtonPushedFcn = createCallbackFcn(app, @GenerateMetadataXLSFileButtonPushed, true);
+            app.GenerateMetadataXLSFileButton.Position = [14 73 200 25];
+            app.GenerateMetadataXLSFileButton.Text = 'Generate Metadata XLS File';
+
+            % Create ImportMetadataFromXLSFileButton
+            app.ImportMetadataFromXLSFileButton = uibutton(app.MetadataPanel, 'push');
+            app.ImportMetadataFromXLSFileButton.ButtonPushedFcn = createCallbackFcn(app, @ImportMetadataFromXLSFileButtonPushed, true);
+            app.ImportMetadataFromXLSFileButton.Position = [14 41 200 25];
+            app.ImportMetadataFromXLSFileButton.Text = 'Import Metadata From XLS File';
+
+            % Create LOADMETAXLS_EditField
+            app.LOADMETAXLS_EditField = uieditfield(app.MetadataPanel, 'text');
+            app.LOADMETAXLS_EditField.Editable = 'off';
+            app.LOADMETAXLS_EditField.BackgroundColor = [0.9412 0.9412 0.9412];
+            app.LOADMETAXLS_EditField.Position = [48 11 166 22];
+
+            % Create FileLabel
+            app.FileLabel = uilabel(app.MetadataPanel);
+            app.FileLabel.Position = [20 11 28 22];
+            app.FileLabel.Text = 'File:';
+
+            % Create ColumnControlPanel
+            app.ColumnControlPanel = uipanel(app.MeasurementsandMetadataTab);
+            app.ColumnControlPanel.Title = 'Column Control';
+            app.ColumnControlPanel.Position = [271 13 336 127];
+
+            % Create RemoveButton
+            app.RemoveButton = uibutton(app.ColumnControlPanel, 'push');
+            app.RemoveButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveButtonPushed, true);
+            app.RemoveButton.Position = [11 10 150 25];
+            app.RemoveButton.Text = 'Remove';
+
+            % Create MoveButton
+            app.MoveButton = uibutton(app.ColumnControlPanel, 'push');
+            app.MoveButton.ButtonPushedFcn = createCallbackFcn(app, @MoveButtonPushed, true);
+            app.MoveButton.Position = [10 73 74 25];
+            app.MoveButton.Text = 'Move <<';
+
+            % Create MoveButton_2
+            app.MoveButton_2 = uibutton(app.ColumnControlPanel, 'push');
+            app.MoveButton_2.ButtonPushedFcn = createCallbackFcn(app, @MoveButton_2Pushed, true);
+            app.MoveButton_2.Position = [87 73 74 25];
+            app.MoveButton_2.Text = '>>Move';
+
+            % Create PlotDatasetsButton
+            app.PlotDatasetsButton = uibutton(app.ColumnControlPanel, 'push');
+            app.PlotDatasetsButton.ButtonPushedFcn = createCallbackFcn(app, @PlotDatasetsButtonPushed, true);
+            app.PlotDatasetsButton.Position = [11 42 150 25];
+            app.PlotDatasetsButton.Text = 'Plot Datasets';
+
+            % Create SortButton
+            app.SortButton = uibutton(app.ColumnControlPanel, 'push');
+            app.SortButton.ButtonPushedFcn = createCallbackFcn(app, @SortButtonPushed, true);
+            app.SortButton.IconAlignment = 'center';
+            app.SortButton.Position = [175 10 153 25];
+            app.SortButton.Text = 'Sort';
+
+            % Create SortDirectionSwitch
+            app.SortDirectionSwitch = uiswitch(app.ColumnControlPanel, 'slider');
+            app.SortDirectionSwitch.Items = {'Ascend', 'Descend'};
+            app.SortDirectionSwitch.Position = [227 44 45 20];
+            app.SortDirectionSwitch.Value = 'Ascend';
+
+            % Create SortRowDropDownLabel
+            app.SortRowDropDownLabel = uilabel(app.ColumnControlPanel);
+            app.SortRowDropDownLabel.HorizontalAlignment = 'right';
+            app.SortRowDropDownLabel.Position = [176 71 54 22];
+            app.SortRowDropDownLabel.Text = 'Sort Row';
+
+            % Create SortRowDropDown
+            app.SortRowDropDown = uidropdown(app.ColumnControlPanel);
+            app.SortRowDropDown.Items = {'2', '3', '4', '5', '6', '7', '8', '10', '11', '12', '13', '14', '15', '16'};
+            app.SortRowDropDown.Position = [241 71 84 22];
+            app.SortRowDropDown.Value = '2';
+
+            % Create DatasetControlPanel
+            app.DatasetControlPanel = uipanel(app.MeasurementsandMetadataTab);
+            app.DatasetControlPanel.Title = 'Dataset Control';
+            app.DatasetControlPanel.Position = [617 13 427 127];
+
+            % Create ofColumnEditFieldLabel
+            app.ofColumnEditFieldLabel = uilabel(app.DatasetControlPanel);
+            app.ofColumnEditFieldLabel.HorizontalAlignment = 'right';
+            app.ofColumnEditFieldLabel.Position = [153 74 60 22];
+            app.ofColumnEditFieldLabel.Text = 'of Column';
+
+            % Create SourceColumnEditField
+            app.SourceColumnEditField = uieditfield(app.DatasetControlPanel, 'numeric');
+            app.SourceColumnEditField.Limits = [1 Inf];
+            app.SourceColumnEditField.ValueDisplayFormat = '%.0f';
+            app.SourceColumnEditField.Position = [228 74 55 22];
+            app.SourceColumnEditField.Value = 1;
+
+            % Create ofColumnsEditFieldLabel
+            app.ofColumnsEditFieldLabel = uilabel(app.DatasetControlPanel);
+            app.ofColumnsEditFieldLabel.HorizontalAlignment = 'right';
+            app.ofColumnsEditFieldLabel.Position = [150 42 73 22];
+            app.ofColumnsEditFieldLabel.Text = 'of Columns (';
+
+            % Create TargetColumnFromEditField
+            app.TargetColumnFromEditField = uieditfield(app.DatasetControlPanel, 'numeric');
+            app.TargetColumnFromEditField.Limits = [1 Inf];
+            app.TargetColumnFromEditField.ValueDisplayFormat = '%.0f';
+            app.TargetColumnFromEditField.Position = [229 43 55 22];
+            app.TargetColumnFromEditField.Value = 1;
+
+            % Create toLabel
+            app.toLabel = uilabel(app.DatasetControlPanel);
+            app.toLabel.HorizontalAlignment = 'right';
+            app.toLabel.Position = [286 42 12 22];
+            app.toLabel.Text = '-';
+
+            % Create TargetColumnToEditField
+            app.TargetColumnToEditField = uieditfield(app.DatasetControlPanel, 'numeric');
+            app.TargetColumnToEditField.Limits = [1 Inf];
+            app.TargetColumnToEditField.ValueDisplayFormat = '%.0f';
+            app.TargetColumnToEditField.Position = [306 42 55 22];
+            app.TargetColumnToEditField.Value = 1;
+
+            % Create SourceLabel
+            app.SourceLabel = uilabel(app.DatasetControlPanel);
+            app.SourceLabel.HorizontalAlignment = 'right';
+            app.SourceLabel.Position = [16 74 46 22];
+            app.SourceLabel.Text = 'Source ';
+
+            % Create SourceDatasetDropDown
+            app.SourceDatasetDropDown = uidropdown(app.DatasetControlPanel);
+            app.SourceDatasetDropDown.Items = {'ds1', 'ds2', 'ds3', 'ds4'};
+            app.SourceDatasetDropDown.ItemsData = {'19', '20', '21', '22'};
+            app.SourceDatasetDropDown.Position = [69 74 81 22];
+            app.SourceDatasetDropDown.Value = '19';
+
+            % Create CopyButton
+            app.CopyButton = uibutton(app.DatasetControlPanel, 'push');
+            app.CopyButton.ButtonPushedFcn = createCallbackFcn(app, @CopyButtonPushed, true);
+            app.CopyButton.IconAlignment = 'right';
+            app.CopyButton.Position = [227 10 181 24];
+            app.CopyButton.Text = 'Copy';
+
+            % Create TargetLabel
+            app.TargetLabel = uilabel(app.DatasetControlPanel);
+            app.TargetLabel.HorizontalAlignment = 'right';
+            app.TargetLabel.Position = [15 43 42 22];
+            app.TargetLabel.Text = 'Target ';
+
+            % Create TargetDatasetDropDown
+            app.TargetDatasetDropDown = uidropdown(app.DatasetControlPanel);
+            app.TargetDatasetDropDown.Items = {'ds1', 'ds2', 'ds3', 'ds4'};
+            app.TargetDatasetDropDown.ItemsData = {'19', '20', '21', '22'};
+            app.TargetDatasetDropDown.Position = [69 43 81 22];
+            app.TargetDatasetDropDown.Value = '20';
+
+            % Create DeleteSourceButton
+            app.DeleteSourceButton = uibutton(app.DatasetControlPanel, 'push');
+            app.DeleteSourceButton.ButtonPushedFcn = createCallbackFcn(app, @DeleteSourceButtonPushed, true);
+            app.DeleteSourceButton.IconAlignment = 'right';
+            app.DeleteSourceButton.Position = [295 73 113 24];
+            app.DeleteSourceButton.Text = 'Delete Source';
+
+            % Create Label
+            app.Label = uilabel(app.DatasetControlPanel);
+            app.Label.Position = [365 43 25 22];
+            app.Label.Text = ')';
 
             % Create DeploymentRecipeTab
             app.DeploymentRecipeTab = uitab(app.TabGroup);

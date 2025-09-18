@@ -8,7 +8,7 @@
       <file>${PROJECT_ROOT}\CaTx4Menlo_resources\icon_24.png</file>
       <file>${PROJECT_ROOT}\CaTx4Menlo_resources\icon_16.png</file>
     </param.icons>
-    <param.version>1.4</param.version>
+    <param.version>1.5</param.version>
     <param.authnamewatermark>MenloSystems and TAG</param.authnamewatermark>
     <param.email>jl2112@cam.ac.uk</param.email>
     <param.company>MenloSystems and University of Cambridge</param.company>
@@ -93,6 +93,8 @@ GitHub Documentation
       <file>${PROJECT_ROOT}\Images\CaTx4_logo.png</file>
       <file>${PROJECT_ROOT}\Images\icon.png</file>
       <file>${PROJECT_ROOT}\Images\MENLO-Logo.png</file>
+      <file>${PROJECT_ROOT}\measurements.csv</file>
+      <file>${PROJECT_ROOT}\progress.txt</file>
     </fileset.depfun>
     <build-deliverables>
       <file location="${PROJECT_ROOT}\CaTx4Menlo\for_testing" name="readme.txt" optional="true">C:\Users\Jongmin Lee\Documents\GitHub\CaTx_Menlo\CaTx4Menlo\for_testing\readme.txt</file>
