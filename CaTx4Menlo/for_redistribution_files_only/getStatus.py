@@ -18,7 +18,7 @@ async def get_status():
     ScanControl = client.scancontrol
 
     # Wait for the connection and initialization
-    await asyncio.sleep(2)  # Adjust the sleep duration if needed for your setup
+    await asyncio.sleep(0.5)  # Adjust the sleep duration if needed for your setup
 
     # Retrieve the current status of ScanControl
     current_status = ScanControl.status

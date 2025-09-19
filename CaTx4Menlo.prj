@@ -84,7 +84,6 @@ GitHub Documentation
       <file>${PROJECT_ROOT}\DeploymentRecipes.json</file>
       <file>${PROJECT_ROOT}\getPulse.py</file>
       <file>${PROJECT_ROOT}\getStatus.py</file>
-      <file>${PROJECT_ROOT}\Profiles.json</file>
       <file>${PROJECT_ROOT}\pywebchannel</file>
       <file>${PROJECT_ROOT}\scancontrolclient.py</file>
     </fileset.package>

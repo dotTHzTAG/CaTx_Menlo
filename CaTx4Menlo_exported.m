@@ -15,37 +15,37 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         PrefixnumberstothedatasetnameLabel  matlab.ui.control.Label
         TabGroup                        matlab.ui.container.TabGroup
         InstrumentsandUsersTab          matlab.ui.container.Tab
-        CurrentUserEditField            matlab.ui.control.EditField
-        CurrentUserEditFieldLabel       matlab.ui.control.Label
         DefaultInstrumentEditField      matlab.ui.control.EditField
         DefaultInstrumentEditFieldLabel  matlab.ui.control.Label
-        SetCurrentUserButton            matlab.ui.control.Button
-        SetDefaultInstrumentButton      matlab.ui.control.Button
-        AnonymousInstrumentButton       matlab.ui.control.Button
-        DonotusefordescriptionsLabel    matlab.ui.control.Label
-        User_MeasurementFieldToEditField  matlab.ui.control.NumericEditField
-        toLabel_3                       matlab.ui.control.Label
-        User_MeasurementFieldFromEditField  matlab.ui.control.NumericEditField
-        MeasurementfieldfromLabel_2     matlab.ui.control.Label
         Ins_MeasurementFieldToEditField  matlab.ui.control.NumericEditField
         toLabel_2                       matlab.ui.control.Label
         Ins_MeasurementFieldFromEditField  matlab.ui.control.NumericEditField
         MeasurementfieldfromLabel       matlab.ui.control.Label
+        InstrumentSelectionEditField    matlab.ui.control.NumericEditField
+        SelectionLabel                  matlab.ui.control.Label
+        SetDefaultInstrumentButton      matlab.ui.control.Button
+        AnonymousInstrumentButton       matlab.ui.control.Button
+        DonotusefordescriptionsLabel    matlab.ui.control.Label
+        RemoveInstrumentButton          matlab.ui.control.Button
+        AddInstrumentButton             matlab.ui.control.Button
+        SetInstrumentMetadataButton     matlab.ui.control.Button
+        InstrumentsLabel                matlab.ui.control.Label
+        UITable_Instruments             matlab.ui.control.Table
+        CurrentUserEditField            matlab.ui.control.EditField
+        CurrentUserEditFieldLabel       matlab.ui.control.Label
+        SetCurrentUserButton            matlab.ui.control.Button
+        User_MeasurementFieldToEditField  matlab.ui.control.NumericEditField
+        toLabel_3                       matlab.ui.control.Label
+        User_MeasurementFieldFromEditField  matlab.ui.control.NumericEditField
+        MeasurementfieldfromLabel_2     matlab.ui.control.Label
         AnonymousUserButton             matlab.ui.control.Button
         UserSelectionEditField          matlab.ui.control.NumericEditField
         SelectionLabel_2                matlab.ui.control.Label
-        InstrumentSelectionEditField    matlab.ui.control.NumericEditField
-        SelectionLabel                  matlab.ui.control.Label
         RemoveUserButton                matlab.ui.control.Button
         AddUserButton                   matlab.ui.control.Button
-        RemoveInstrumentButton          matlab.ui.control.Button
-        AddInstrumentButton             matlab.ui.control.Button
         SetUserMetadataButton           matlab.ui.control.Button
-        SetInstrumentMetadataButton     matlab.ui.control.Button
         UsersLabel                      matlab.ui.control.Label
-        InstrumentsLabel                matlab.ui.control.Label
         UITable_Users                   matlab.ui.control.Table
-        UITable_Instruments             matlab.ui.control.Table
         MeasurementsandMetadataTab      matlab.ui.container.Tab
         DatasetControlPanel             matlab.ui.container.Panel
         Label                           matlab.ui.control.Label
@@ -2355,19 +2355,9 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.InstrumentsandUsersTab = uitab(app.TabGroup);
             app.InstrumentsandUsersTab.Title = 'Instruments and Users';
 
-            % Create UITable_Instruments
-            app.UITable_Instruments = uitable(app.InstrumentsandUsersTab);
-            app.UITable_Instruments.ColumnName = {'Model'; 'Manufacturer'; 'Address'};
-            app.UITable_Instruments.ColumnWidth = {200, 200, 'auto'};
-            app.UITable_Instruments.RowName = {};
-            app.UITable_Instruments.ColumnEditable = true;
-            app.UITable_Instruments.CellEditCallback = createCallbackFcn(app, @UITable_InstrumentsCellEdit, true);
-            app.UITable_Instruments.CellSelectionCallback = createCallbackFcn(app, @UITable_InstrumentsCellSelection, true);
-            app.UITable_Instruments.Multiselect = 'off';
-            app.UITable_Instruments.Position = [33 513 870 136];
-
             % Create UITable_Users
             app.UITable_Users = uitable(app.InstrumentsandUsersTab);
+            app.UITable_Users.BackgroundColor = [1 1 1;0.9412 0.9412 0.9412];
             app.UITable_Users.ColumnName = {'ORCID'; 'Name'; 'Email'; 'Affiliation'};
             app.UITable_Users.ColumnWidth = {150, 150, 150, 'auto'};
             app.UITable_Users.RowName = {};
@@ -2375,78 +2365,38 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.UITable_Users.CellEditCallback = createCallbackFcn(app, @UITable_UsersCellEdit, true);
             app.UITable_Users.CellSelectionCallback = createCallbackFcn(app, @UITable_UsersCellSelection, true);
             app.UITable_Users.Multiselect = 'off';
-            app.UITable_Users.Position = [33 110 870 284];
-
-            % Create InstrumentsLabel
-            app.InstrumentsLabel = uilabel(app.InstrumentsandUsersTab);
-            app.InstrumentsLabel.FontSize = 13;
-            app.InstrumentsLabel.FontWeight = 'bold';
-            app.InstrumentsLabel.Position = [33 650 96 22];
-            app.InstrumentsLabel.Text = 'Instruments*';
+            app.UITable_Users.Position = [32 378 870 274];
 
             % Create UsersLabel
             app.UsersLabel = uilabel(app.InstrumentsandUsersTab);
             app.UsersLabel.FontSize = 13;
             app.UsersLabel.FontWeight = 'bold';
-            app.UsersLabel.Position = [33 396 98 22];
+            app.UsersLabel.Position = [32 654 98 22];
             app.UsersLabel.Text = 'Users*';
-
-            % Create SetInstrumentMetadataButton
-            app.SetInstrumentMetadataButton = uibutton(app.InstrumentsandUsersTab, 'push');
-            app.SetInstrumentMetadataButton.ButtonPushedFcn = createCallbackFcn(app, @SetInstrumentMetadataButtonPushed, true);
-            app.SetInstrumentMetadataButton.Position = [736 455 167 25];
-            app.SetInstrumentMetadataButton.Text = 'Set Instrument Metadata';
 
             % Create SetUserMetadataButton
             app.SetUserMetadataButton = uibutton(app.InstrumentsandUsersTab, 'push');
             app.SetUserMetadataButton.ButtonPushedFcn = createCallbackFcn(app, @SetUserMetadataButtonPushed, true);
-            app.SetUserMetadataButton.Position = [726 48 171 25];
+            app.SetUserMetadataButton.Position = [736 306 160 25];
             app.SetUserMetadataButton.Text = 'Set User Metadata';
-
-            % Create AddInstrumentButton
-            app.AddInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
-            app.AddInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @AddInstrumentButtonPushed, true);
-            app.AddInstrumentButton.Position = [915 567 135 25];
-            app.AddInstrumentButton.Text = 'Add Instrument';
-
-            % Create RemoveInstrumentButton
-            app.RemoveInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
-            app.RemoveInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveInstrumentButtonPushed, true);
-            app.RemoveInstrumentButton.Position = [915 537 135 25];
-            app.RemoveInstrumentButton.Text = 'Remove Instrument';
 
             % Create AddUserButton
             app.AddUserButton = uibutton(app.InstrumentsandUsersTab, 'push');
             app.AddUserButton.ButtonPushedFcn = createCallbackFcn(app, @AddUserButtonPushed, true);
-            app.AddUserButton.Position = [915 309 135 25];
+            app.AddUserButton.Position = [914 567 135 25];
             app.AddUserButton.Text = 'Add User';
 
             % Create RemoveUserButton
             app.RemoveUserButton = uibutton(app.InstrumentsandUsersTab, 'push');
             app.RemoveUserButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveUserButtonPushed, true);
-            app.RemoveUserButton.Position = [915 279 135 25];
+            app.RemoveUserButton.Position = [914 537 135 25];
             app.RemoveUserButton.Text = 'Remove User';
-
-            % Create SelectionLabel
-            app.SelectionLabel = uilabel(app.InstrumentsandUsersTab);
-            app.SelectionLabel.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.SelectionLabel.HorizontalAlignment = 'right';
-            app.SelectionLabel.Position = [335 456 55 22];
-            app.SelectionLabel.Text = 'Selection';
-
-            % Create InstrumentSelectionEditField
-            app.InstrumentSelectionEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
-            app.InstrumentSelectionEditField.Limits = [0 Inf];
-            app.InstrumentSelectionEditField.ValueDisplayFormat = '%.0f';
-            app.InstrumentSelectionEditField.Editable = 'off';
-            app.InstrumentSelectionEditField.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.InstrumentSelectionEditField.Position = [398 456 34 22];
 
             % Create SelectionLabel_2
             app.SelectionLabel_2 = uilabel(app.InstrumentsandUsersTab);
             app.SelectionLabel_2.BackgroundColor = [0.9412 0.9412 0.9412];
             app.SelectionLabel_2.HorizontalAlignment = 'right';
-            app.SelectionLabel_2.Position = [329 49 55 22];
+            app.SelectionLabel_2.Position = [342 307 55 22];
             app.SelectionLabel_2.Text = 'Selection';
 
             % Create UserSelectionEditField
@@ -2455,114 +2405,166 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
             app.UserSelectionEditField.ValueDisplayFormat = '%.0f';
             app.UserSelectionEditField.Editable = 'off';
             app.UserSelectionEditField.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.UserSelectionEditField.Position = [392 49 34 22];
+            app.UserSelectionEditField.Position = [405 307 34 22];
 
             % Create AnonymousUserButton
             app.AnonymousUserButton = uibutton(app.InstrumentsandUsersTab, 'push');
             app.AnonymousUserButton.ButtonPushedFcn = createCallbackFcn(app, @AnonymousUserButtonPushed, true);
-            app.AnonymousUserButton.Position = [726 16 172 25];
+            app.AnonymousUserButton.Position = [736 274 159 25];
             app.AnonymousUserButton.Text = 'Anonymous User';
-
-            % Create MeasurementfieldfromLabel
-            app.MeasurementfieldfromLabel = uilabel(app.InstrumentsandUsersTab);
-            app.MeasurementfieldfromLabel.HorizontalAlignment = 'right';
-            app.MeasurementfieldfromLabel.Position = [437 456 139 22];
-            app.MeasurementfieldfromLabel.Text = 'Measurement Field From';
-
-            % Create Ins_MeasurementFieldFromEditField
-            app.Ins_MeasurementFieldFromEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
-            app.Ins_MeasurementFieldFromEditField.Limits = [1 Inf];
-            app.Ins_MeasurementFieldFromEditField.ValueDisplayFormat = '%.0f';
-            app.Ins_MeasurementFieldFromEditField.Position = [583 456 55 22];
-            app.Ins_MeasurementFieldFromEditField.Value = 1;
-
-            % Create toLabel_2
-            app.toLabel_2 = uilabel(app.InstrumentsandUsersTab);
-            app.toLabel_2.HorizontalAlignment = 'right';
-            app.toLabel_2.Position = [639 456 25 22];
-            app.toLabel_2.Text = 'To';
-
-            % Create Ins_MeasurementFieldToEditField
-            app.Ins_MeasurementFieldToEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
-            app.Ins_MeasurementFieldToEditField.Limits = [1 Inf];
-            app.Ins_MeasurementFieldToEditField.ValueDisplayFormat = '%.0f';
-            app.Ins_MeasurementFieldToEditField.Position = [668 456 55 22];
-            app.Ins_MeasurementFieldToEditField.Value = 1;
 
             % Create MeasurementfieldfromLabel_2
             app.MeasurementfieldfromLabel_2 = uilabel(app.InstrumentsandUsersTab);
             app.MeasurementfieldfromLabel_2.HorizontalAlignment = 'right';
-            app.MeasurementfieldfromLabel_2.Position = [428 49 139 22];
+            app.MeasurementfieldfromLabel_2.Position = [441 307 139 22];
             app.MeasurementfieldfromLabel_2.Text = 'Measurement Field From';
 
             % Create User_MeasurementFieldFromEditField
             app.User_MeasurementFieldFromEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
             app.User_MeasurementFieldFromEditField.Limits = [1 Inf];
             app.User_MeasurementFieldFromEditField.ValueDisplayFormat = '%.0f';
-            app.User_MeasurementFieldFromEditField.Position = [574 49 55 22];
+            app.User_MeasurementFieldFromEditField.Position = [587 307 55 22];
             app.User_MeasurementFieldFromEditField.Value = 1;
 
             % Create toLabel_3
             app.toLabel_3 = uilabel(app.InstrumentsandUsersTab);
             app.toLabel_3.HorizontalAlignment = 'right';
-            app.toLabel_3.Position = [620 49 25 22];
+            app.toLabel_3.Position = [633 307 25 22];
             app.toLabel_3.Text = 'To';
 
             % Create User_MeasurementFieldToEditField
             app.User_MeasurementFieldToEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
             app.User_MeasurementFieldToEditField.Limits = [1 Inf];
             app.User_MeasurementFieldToEditField.ValueDisplayFormat = '%.0f';
-            app.User_MeasurementFieldToEditField.Position = [649 49 50 22];
+            app.User_MeasurementFieldToEditField.Position = [662 307 50 22];
             app.User_MeasurementFieldToEditField.Value = 1;
-
-            % Create DonotusefordescriptionsLabel
-            app.DonotusefordescriptionsLabel = uilabel(app.InstrumentsandUsersTab);
-            app.DonotusefordescriptionsLabel.FontSize = 11;
-            app.DonotusefordescriptionsLabel.FontColor = [0.851 0.3255 0.098];
-            app.DonotusefordescriptionsLabel.Position = [39 490 160 22];
-            app.DonotusefordescriptionsLabel.Text = '* Do not use '' / '' for descriptions';
-
-            % Create AnonymousInstrumentButton
-            app.AnonymousInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
-            app.AnonymousInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @AnonymousInstrumentButtonPushed, true);
-            app.AnonymousInstrumentButton.Position = [736 424 167 25];
-            app.AnonymousInstrumentButton.Text = 'Anonymous Instrument';
-
-            % Create SetDefaultInstrumentButton
-            app.SetDefaultInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
-            app.SetDefaultInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @SetDefaultInstrumentButtonPushed, true);
-            app.SetDefaultInstrumentButton.Position = [915 598 135 25];
-            app.SetDefaultInstrumentButton.Text = 'Set Default Instrument';
 
             % Create SetCurrentUserButton
             app.SetCurrentUserButton = uibutton(app.InstrumentsandUsersTab, 'push');
             app.SetCurrentUserButton.ButtonPushedFcn = createCallbackFcn(app, @SetCurrentUserButtonPushed, true);
-            app.SetCurrentUserButton.Position = [915 340 135 25];
+            app.SetCurrentUserButton.Position = [914 598 135 25];
             app.SetCurrentUserButton.Text = 'Set Current User';
-
-            % Create DefaultInstrumentEditFieldLabel
-            app.DefaultInstrumentEditFieldLabel = uilabel(app.InstrumentsandUsersTab);
-            app.DefaultInstrumentEditFieldLabel.HorizontalAlignment = 'right';
-            app.DefaultInstrumentEditFieldLabel.Position = [336 486 106 22];
-            app.DefaultInstrumentEditFieldLabel.Text = 'Default  Instrument';
-
-            % Create DefaultInstrumentEditField
-            app.DefaultInstrumentEditField = uieditfield(app.InstrumentsandUsersTab, 'text');
-            app.DefaultInstrumentEditField.Editable = 'off';
-            app.DefaultInstrumentEditField.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.DefaultInstrumentEditField.Position = [457 486 444 22];
 
             % Create CurrentUserEditFieldLabel
             app.CurrentUserEditFieldLabel = uilabel(app.InstrumentsandUsersTab);
             app.CurrentUserEditFieldLabel.HorizontalAlignment = 'right';
-            app.CurrentUserEditFieldLabel.Position = [331 80 74 22];
+            app.CurrentUserEditFieldLabel.Position = [230 339 74 22];
             app.CurrentUserEditFieldLabel.Text = 'Current User';
 
             % Create CurrentUserEditField
             app.CurrentUserEditField = uieditfield(app.InstrumentsandUsersTab, 'text');
             app.CurrentUserEditField.Editable = 'off';
             app.CurrentUserEditField.BackgroundColor = [0.9412 0.9412 0.9412];
-            app.CurrentUserEditField.Position = [420 80 477 22];
+            app.CurrentUserEditField.Position = [319 339 576 22];
+
+            % Create UITable_Instruments
+            app.UITable_Instruments = uitable(app.InstrumentsandUsersTab);
+            app.UITable_Instruments.BackgroundColor = [1 1 1;0.9412 0.9412 0.9412];
+            app.UITable_Instruments.ColumnName = {'Model'; 'Manufacturer'; 'Address'};
+            app.UITable_Instruments.ColumnWidth = {200, 200, 'auto'};
+            app.UITable_Instruments.RowName = {};
+            app.UITable_Instruments.ColumnEditable = true;
+            app.UITable_Instruments.CellEditCallback = createCallbackFcn(app, @UITable_InstrumentsCellEdit, true);
+            app.UITable_Instruments.CellSelectionCallback = createCallbackFcn(app, @UITable_InstrumentsCellSelection, true);
+            app.UITable_Instruments.Multiselect = 'off';
+            app.UITable_Instruments.Position = [32 119 870 88];
+
+            % Create InstrumentsLabel
+            app.InstrumentsLabel = uilabel(app.InstrumentsandUsersTab);
+            app.InstrumentsLabel.FontSize = 13;
+            app.InstrumentsLabel.FontWeight = 'bold';
+            app.InstrumentsLabel.Position = [32 208 96 22];
+            app.InstrumentsLabel.Text = 'Instruments*';
+
+            % Create SetInstrumentMetadataButton
+            app.SetInstrumentMetadataButton = uibutton(app.InstrumentsandUsersTab, 'push');
+            app.SetInstrumentMetadataButton.ButtonPushedFcn = createCallbackFcn(app, @SetInstrumentMetadataButtonPushed, true);
+            app.SetInstrumentMetadataButton.Position = [736 53 159 25];
+            app.SetInstrumentMetadataButton.Text = 'Set Instrument Metadata';
+
+            % Create AddInstrumentButton
+            app.AddInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
+            app.AddInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @AddInstrumentButtonPushed, true);
+            app.AddInstrumentButton.Position = [912 149 135 25];
+            app.AddInstrumentButton.Text = 'Add Instrument';
+
+            % Create RemoveInstrumentButton
+            app.RemoveInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
+            app.RemoveInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveInstrumentButtonPushed, true);
+            app.RemoveInstrumentButton.Position = [912 119 135 25];
+            app.RemoveInstrumentButton.Text = 'Remove Instrument';
+
+            % Create DonotusefordescriptionsLabel
+            app.DonotusefordescriptionsLabel = uilabel(app.InstrumentsandUsersTab);
+            app.DonotusefordescriptionsLabel.FontSize = 11;
+            app.DonotusefordescriptionsLabel.FontColor = [0.851 0.3255 0.098];
+            app.DonotusefordescriptionsLabel.Position = [37 7 160 22];
+            app.DonotusefordescriptionsLabel.Text = '* Do not use '' / '' for descriptions';
+
+            % Create AnonymousInstrumentButton
+            app.AnonymousInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
+            app.AnonymousInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @AnonymousInstrumentButtonPushed, true);
+            app.AnonymousInstrumentButton.Position = [736 22 159 25];
+            app.AnonymousInstrumentButton.Text = 'Anonymous Instrument';
+
+            % Create SetDefaultInstrumentButton
+            app.SetDefaultInstrumentButton = uibutton(app.InstrumentsandUsersTab, 'push');
+            app.SetDefaultInstrumentButton.ButtonPushedFcn = createCallbackFcn(app, @SetDefaultInstrumentButtonPushed, true);
+            app.SetDefaultInstrumentButton.Position = [912 180 135 25];
+            app.SetDefaultInstrumentButton.Text = 'Set Default Instrument';
+
+            % Create SelectionLabel
+            app.SelectionLabel = uilabel(app.InstrumentsandUsersTab);
+            app.SelectionLabel.BackgroundColor = [0.9412 0.9412 0.9412];
+            app.SelectionLabel.HorizontalAlignment = 'right';
+            app.SelectionLabel.Position = [335 54 55 22];
+            app.SelectionLabel.Text = 'Selection';
+
+            % Create InstrumentSelectionEditField
+            app.InstrumentSelectionEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
+            app.InstrumentSelectionEditField.Limits = [0 Inf];
+            app.InstrumentSelectionEditField.ValueDisplayFormat = '%.0f';
+            app.InstrumentSelectionEditField.Editable = 'off';
+            app.InstrumentSelectionEditField.BackgroundColor = [0.9412 0.9412 0.9412];
+            app.InstrumentSelectionEditField.Position = [398 54 34 22];
+
+            % Create MeasurementfieldfromLabel
+            app.MeasurementfieldfromLabel = uilabel(app.InstrumentsandUsersTab);
+            app.MeasurementfieldfromLabel.HorizontalAlignment = 'right';
+            app.MeasurementfieldfromLabel.Position = [437 54 139 22];
+            app.MeasurementfieldfromLabel.Text = 'Measurement Field From';
+
+            % Create Ins_MeasurementFieldFromEditField
+            app.Ins_MeasurementFieldFromEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
+            app.Ins_MeasurementFieldFromEditField.Limits = [1 Inf];
+            app.Ins_MeasurementFieldFromEditField.ValueDisplayFormat = '%.0f';
+            app.Ins_MeasurementFieldFromEditField.Position = [583 54 55 22];
+            app.Ins_MeasurementFieldFromEditField.Value = 1;
+
+            % Create toLabel_2
+            app.toLabel_2 = uilabel(app.InstrumentsandUsersTab);
+            app.toLabel_2.HorizontalAlignment = 'right';
+            app.toLabel_2.Position = [639 54 25 22];
+            app.toLabel_2.Text = 'To';
+
+            % Create Ins_MeasurementFieldToEditField
+            app.Ins_MeasurementFieldToEditField = uieditfield(app.InstrumentsandUsersTab, 'numeric');
+            app.Ins_MeasurementFieldToEditField.Limits = [1 Inf];
+            app.Ins_MeasurementFieldToEditField.ValueDisplayFormat = '%.0f';
+            app.Ins_MeasurementFieldToEditField.Position = [668 54 55 22];
+            app.Ins_MeasurementFieldToEditField.Value = 1;
+
+            % Create DefaultInstrumentEditFieldLabel
+            app.DefaultInstrumentEditFieldLabel = uilabel(app.InstrumentsandUsersTab);
+            app.DefaultInstrumentEditFieldLabel.HorizontalAlignment = 'right';
+            app.DefaultInstrumentEditFieldLabel.Position = [238 84 106 22];
+            app.DefaultInstrumentEditFieldLabel.Text = 'Default  Instrument';
+
+            % Create DefaultInstrumentEditField
+            app.DefaultInstrumentEditField = uieditfield(app.InstrumentsandUsersTab, 'text');
+            app.DefaultInstrumentEditField.Editable = 'off';
+            app.DefaultInstrumentEditField.BackgroundColor = [0.9412 0.9412 0.9412];
+            app.DefaultInstrumentEditField.Position = [359 84 537 22];
 
             % Create MeasurementsandMetadataTab
             app.MeasurementsandMetadataTab = uitab(app.TabGroup);
