@@ -937,6 +937,10 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
                 return;
             end
 
+            if ~exist(app.profileFile)
+                copyfile DefaultProfiles.json Profiles.json;
+            end
+
             Tcell_header = struct2table(configData.T_header,"AsArray",true);
             Tcell_guide = struct2table(configData.T_guide);
             app.thzVer = configData.thzVer;

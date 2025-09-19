@@ -81,6 +81,7 @@ GitHub Documentation
     <fileset.resources />
     <fileset.package>
       <file>${PROJECT_ROOT}\Configuration.json</file>
+      <file>${PROJECT_ROOT}\DefaultProfiles.json</file>
       <file>${PROJECT_ROOT}\DeploymentRecipes.json</file>
       <file>${PROJECT_ROOT}\getPulse.py</file>
       <file>${PROJECT_ROOT}\getStatus.py</file>

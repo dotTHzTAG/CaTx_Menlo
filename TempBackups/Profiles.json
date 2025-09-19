@@ -1,0 +1,15 @@
+{
+  "Instruments": {
+    "Model": "TeraSmart",
+    "Manufacturer": "MenloSystems",
+    "Address": "Martinsried, Germany"
+  },
+  "Users": {
+    "ORCID": "0000-0002-3476-2922",
+    "Name": "Jongmin Lee",
+    "Email": "jl2112@cam.ac.uk",
+    "Affiliation": "University of Cambridge, UK"
+  },
+  "defaultInstrument": "TeraSmart/MenloSystems/Martinsried, Germany",
+  "currentUser": "0000-0002-3476-2922/Jongmin Lee/jl2112@cam.ac.uk/University of Cambridge, UK"
+}
