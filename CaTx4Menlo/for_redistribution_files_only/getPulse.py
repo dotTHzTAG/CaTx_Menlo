@@ -39,8 +39,8 @@ if args.count is not None:
 if args.interval is not None:
     interval_time = args.interval
 
-print('waveform_average =', str(int(waveform_average)))
-print('interval time =', str(int(interval_time)))
+print('Waveform_average =', str(int(waveform_average)))
+print('Interval time =', str(int(interval_time)))
 
 if measurement_duration == 0:
     count_mode = True
@@ -103,7 +103,7 @@ def getPulse(data):
                 ScanControl.setDesiredAverages(1)
                 ScanControl.stop()
                 client.loop.stop()
-                write_status(f"{i - 1} measurements done!")
+                write_status(f"{i - 1} measurements completed!")
 
         else:  # time_mode
             if i == 1:
@@ -144,7 +144,7 @@ def getPulse(data):
                 ScanControl.setDesiredAverages(1)
                 ScanControl.stop()
                 client.loop.stop()
-                write_status(f"{i - 1} measurements done!")
+                write_status(f"{i - 1} measurements completed!")
 
 def write_status(msg):
     print(msg)

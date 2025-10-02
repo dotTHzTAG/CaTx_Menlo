@@ -1,0 +1,17 @@
+{
+  "Instruments": {
+    "Model": "TeraSmart",
+    "Manufacturer": "MenloSystems",
+    "Address": "Martinsried, Germany"
+  },
+  "Users": [
+    {
+      "ORCID": "0000-0000-1111-2222",
+      "Name": "User",
+      "Email": "User@thz",
+      "Affiliation": "Terahertz Research Centre"
+    }
+  ],
+  "defaultInstrument": "TeraSmart/MenloSystems/Martinsried, Germany",
+  "currentUser": "0000-0000-1111-22222/User/User@thz/Terahertz Research Centre"
+}

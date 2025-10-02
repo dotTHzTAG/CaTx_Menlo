@@ -61,6 +61,11 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
         group
         mdVal
         mdDescription
+        % Exclude following files during compilation
+        %#exclude Profiles.json
+        %#exclude Configuration.json
+        %#exclude measurements.csv
+        %#exclude progress.txt
     end
     
     methods (Access = private)
@@ -254,8 +259,8 @@ classdef AcquisitionDialog_exported < matlab.apps.AppBase
                     runPython = false;
                 end
 
-                if contains(msg,'done')
-                    msg = "Measurement done!";
+                if contains(msg,"completed",IgnoreCase=true)
+                    msg = "Measurement completed!";
                     runPython = false;
                     measMat = readtable(measurementFile);
                 end

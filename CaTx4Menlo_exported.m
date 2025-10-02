@@ -164,6 +164,7 @@ classdef CaTx4Menlo_exported < matlab.apps.AppBase
         recipeFile
         profileFile
         configFile
+        % Exclude following files during compilation
         %#exclude DeploymentRecipes.json
         %#exclude Profiles.json
         %#exclude Configuration.json
